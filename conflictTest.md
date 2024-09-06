@@ -1,3 +1,3 @@
-This is some text Changed from VS
+This is some text changed on Git
 
 This is some text from Git
