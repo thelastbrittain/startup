@@ -14,6 +14,12 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
 
 ![List Page](NotesAssets/list_page.png)
 
+## Key Features
+- Secure Login with HTTPS
+- Ability to add climbs to a personal log stored on a database
+- Ability to view log in pyramid form
+- Ability view others' logs and see changes in real time via websocket
+
 ## Technologies
 - HTML - Uses correct HTML structure for application. 5 HTML pages. One for login, one for submitting a climb, one for viewing your pyramid, one for viewing list of other people who have posted a pyramid, one About page
 - CSS - Use for styling, color choice, and resizing based on color choice
