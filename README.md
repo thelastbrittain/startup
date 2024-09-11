@@ -6,11 +6,10 @@ Here are my [Notes](https://github.com/thelastbrittain/startup/blob/main/notes.m
 After a year or so of climbing, most climbers feel that they are beginning to plateau. They don’t understand that they will not climb a harder grade every session, and they fail to track their progress. The climbing pyramid theory is that to climb a route ranked 1 grade harder, you must climb 2-3 routes that are 1 grade easier. If you log every climb you’ve ever done, the results appear like a pyramid, with a high quantity of easier climbs as the base and a few, harder routes forming the top. This application helps people track the routes they have climbed and displays their efforts in a pyramid, showing them the progress they really are making. 
 
 ## Design
-![Home Page](/Users/benjaminbrittain/Desktop/CS260/startup/NotesAssets/home_page.png)
-![Add Climb Page](/Users/benjaminbrittain/Desktop/CS260/startup/NotesAssets/add_climb_page.png)
-![Log Page](/Users/benjaminbrittain/Desktop/CS260/startup/NotesAssets/log_page.png)
-![List Page](/Users/benjaminbrittain/Desktop/CS260/startup/NotesAssets/list_page.png)
-![About Page](NotesAssets/about_page.png)
+![Home Page](NotesAssets/home_page.png)
+![Add Climb Page](NotesAssets/add_climb_page.png)
+![Log Page](NotesAssets/log_page.png)
+![List Page](NotesAssets/list_page.png)
 
 ## Technologies
 - HTML - Uses correct HTML structure for application. 5 HTML pages. One for login, one for submitting a climb, one for viewing your pyramid, one for viewing list of other people who have posted a pyramid, one About page
