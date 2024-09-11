@@ -1,5 +1,5 @@
 # Pyramid Startup
-A repository to hold a personal website
+A repository to hold a personal website.
 Here are my [Notes](https://github.com/thelastbrittain/startup/blob/main/notes.md)
 
 ## Elevator Pitch
@@ -7,8 +7,11 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
 
 ## Design
 ![Home Page](NotesAssets/home_page.png)
+
 ![Add Climb Page](NotesAssets/add_climb_page.png)
+
 ![Log Page](NotesAssets/log_page.png)
+
 ![List Page](NotesAssets/list_page.png)
 
 ## Technologies
