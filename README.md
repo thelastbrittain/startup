@@ -21,14 +21,14 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
 - Ability view others' logs and see changes in real time via websocket
 
 ## Technologies
-- HTML - Uses correct HTML structure for application. 5 HTML pages. One for login, one for submitting a climb, one for viewing your pyramid, one for viewing list of other people who have posted a pyramid, one About page
-- CSS - Use for styling, color choice, and resizing based on color choice
-- JavaScript - Handles login, adding a climb, properly displaying the pyramid, properly displaying other users, and backend endpoint calls.
-- React - Single page application utilizing React Router to connect pages and dynamically display data. 
-- Service - Backend service with endpoints for:
+-  **HTML** - Uses correct HTML structure for application. 5 HTML pages. One for login, one for submitting a climb, one for viewing your pyramid, one for viewing list of other people who have posted a pyramid, one About page
+- **CSS** - Use for styling, color choice, and resizing based on color choice
+- **JavaScript** - Handles login, adding a climb, properly displaying the pyramid, properly displaying other users, and backend endpoint calls.
+- **React** - Single page application utilizing React Router to connect pages and dynamically display data. 
+- **Service** - Backend service with endpoints for:
   - Submitting a route
   - Retrieving other user’s pyramid
   - Showing stock climbing images after submitting a climb (Pexels)
-- DB/Login - Store account credentials and personal pyramids. Authentication required to create personal pyramid
-- WebSocket - When a user submits a climb, their pyramid is updated for everyone
+- **DB/Login** - Store account credentials and personal pyramids. Authentication required to create personal pyramid
+- **WebSocket** - When a user submits a climb, their pyramid is updated for everyone
 
