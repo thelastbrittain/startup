@@ -22,7 +22,46 @@
         I need a form here that asks:
         Grade of the route, potentially with drop down options
         Any notes you'd like to add
-        Submit button. Submitting refreshes the page
+        Submit button. Submitting takes you to post submit page
+
+        <form action ="postUpdateLog.html" method="post"> 
+            <ul>
+                <li>
+                    <label for="routeGrade">Route Grade: </label>
+                    <select id="routeGrade" name="varrouteGrade">
+                    <optgroup label="Sub 10">
+                        <option>5.6</option>
+                        <option>5.7</option>
+                        <option>5.8</option>
+                        <option>5.9</option>
+                    </optgroup>
+                    <optgroup label="10a-10d">
+                        <option>5.10a</option>
+                        <option>5.10b</option>
+                        <option>5.10c</option>
+                        <option>5.10d</option>
+                    </optgroup>
+                    <optgroup label="11a-11d">
+                        <option>5.11a</option>
+                        <option>5.11b</option>
+                        <option>5.11c</option>
+                        <option>5.11d</option>
+                    </optgroup>
+                    <optgroup label="12a-12d">
+                        <option>5.12a</option>
+                        <option>5.12b</option>
+                        <option>5.12c</option>
+                        <option>5.12d</option>
+                    </optgroup>
+                    </select>
+                </li>
+                <li>
+                    <label for="routeNotes">Additional Notes: </label>
+                    <textarea id="routeNotes" name="varrouteNotes"></textarea>
+                  </li>
+            </ul>
+            <button type="submit">Submit</button>
+        </form>
     </main>
     <footer>
         <hr />
