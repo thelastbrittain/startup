@@ -32,3 +32,10 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
 - **DB/Login** - Store account credentials and personal pyramids. Authentication required to create personal pyramid
 - **WebSocket** - When a user submits a climb, their pyramid is updated for everyone
 
+## HTML deliverable
+ - [x] HTML pages - Five HTML pages that represent the ability to login, view logs, see friends, add to your log, and congratulate for adding to a log. 
+ - [x] Links - Links to each page except the congrats page, is displayed on a header on each page. The login page automatically links to the add log page. The log page automatically links to the congrats page, which links back to the log page. 
+ - [x] Text - There is text in the about page describing the website as well as descriptive p tags and h tags scattered throughout the website
+ - [x] Images - There is an image on the congrats page - this will be an API call 
+ - [x] DB/Login - Input box and submit button for login. The friends list will also be pulled from the DB
+ - [x] WebSocket - Real time updates to logs will utilize the WebSocket 
