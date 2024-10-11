@@ -39,3 +39,11 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
  - [x] Images - There is an image on the congrats page - this will be an API call 
  - [x] DB/Login - Input box and submit button for login. The friends list will also be pulled from the DB
  - [x] WebSocket - Real time updates to logs will utilize the WebSocket 
+
+## CSS deliverable
+ - [x] **Header, footer, and main content body **
+ - [x] **Navigation elements ** - Cleanly formatted bread crumbs
+ - [x] **Responsive to window resizing **- My app looks great on all window sizes and devices
+ - [x] **Application elements ** - Used good contrast and whitespace
+ - [x] **Application text content **- Consistent fonts
+ - [x] **Application images **- Added an image in the about page
