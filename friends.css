@@ -1,0 +1,6 @@
+.custom-border th, 
+.custom-border td,
+.custom-border tr {
+  border: 2px solid #336799 !important ;
+  border-color: #336799 !important; /* Ensures the border color applies to each cell */
+}

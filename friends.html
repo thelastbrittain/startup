@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Log</title>
     <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="friends.css"/>
 	<link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -32,16 +33,40 @@
 			</menu>
 	  </nav>
 	</header>
-    <main>
-        <hr />
-        Database data
-        <h1>Check out other peoples' log!</h1>
-        <ol>
-            <li><a href="log.html">Joe's Pyramid</a></li>
-            <li><a href="log.html">Adam's Pyramid</a></li>
-            <li><a href="log.html">Alex's Pyramid</a></li>
-            <li><a href="log.html">Tommy's Pyramid</a></li>
-        </ol>
+    <main class = "container-fluid">
+        <!-- Columns:  Name, hardest route, number of routes climbed -->
+         <!-- 336799 MTN Proj blue color -->
+        <h1>How are your friends doing?</h1>
+        <table class="table table-striped table-bordered custom-border">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Hardest Send</th>
+                    <th>Routes logged</th>
+                </tr>
+            </thead>
+            <tbody class="table-dark">
+                <tr>
+                    <td>1</td>
+                    <td>Joe</td>
+                    <td>10c</td>
+                    <td>30</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Adam Ondra</td>
+                    <td>15d</td>
+                    <td>4987</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Tommy Caldwell</td>
+                    <td>15a</td>
+                    <td>4988</td>
+                  </tr>
+            </tbody>
+        </table>
         <h3>This will be database data</h3>
     </main>
     <footer class = "bg-white text-dark">
