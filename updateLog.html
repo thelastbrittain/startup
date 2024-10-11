@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Log</title>
     <link rel="stylesheet" href="main.css" />
-	<link
+    <link rel="stylesheet" href="updateLog.css"/>
+ 	<link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
@@ -32,10 +33,10 @@
 			</menu>
 	  </nav>
 	</header>
-    <main>
-        <h1>Update Your Climbing Log</h1>
+    <main class="updateLog-main">
+        <h1 class="updateLog-header">Update Your Climbing Log</h1>
         <!-- Change this to a post method later -->
-        <form action ="postUpdateLog.html" method="get"> 
+        <form action ="postUpdateLog.html" method="get" class="updateLog-form"> 
             <div class="mb-3">
                 <label for="routeGrade" class="form-label">Route Grade: </label>
                 <select id="routeGrade" name="varrouteGrade" class="form-select">

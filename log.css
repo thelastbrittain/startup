@@ -1,0 +1,31 @@
+.pyramid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 20px;
+    font-size: 0;
+    margin-top: 8rem;
+}
+
+.log-header {
+margin-top: 2.5rem;
+}
+.row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0; 
+    margin-top: 0;
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+}
+
+.row > * {
+    width: auto !important;
+    padding-left: .001px!important;
+    padding-right: .001px !important;
+}
+
+.log-main {
+    justify-content: flex-start;
+}
