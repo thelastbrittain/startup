@@ -183,3 +183,7 @@ is not available for align-content1.
 To use these properties effectively, it's crucial to understand the flex container's main and cross axes, which can change based
  on the flex-direction property. By combining justify-content and align-content, you can achieve precise control over the layout 
  and spacing of flex items in both directions within your flex container.
+
+
+
+ Proj: Got to instlaling react router dom. INstalled bootstrap, but haven't imported it into any files. 
