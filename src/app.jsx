@@ -22,6 +22,7 @@ export default function App() {
                     <Route path="/about" element={<About/>}/>
                     <Route path="/updateLog" element={<UpdateLog/>}/>
                     <Route path='*' element={<NotFound />} />
+                    <Route path="/postUpdateLog"/>
                 </Routes>
                 <Footer/>
             </div>
@@ -38,7 +39,7 @@ function Header() {
     return (
         <header className="container-fluid">
 			<nav className = "navbar fixed-top navbar-light bg-white">
-				<NavLink className = "navbar-brand" to="login">Pryamid &#x25B2;</NavLink>
+				<NavLink className = "navbar-brand" to="/">Pryamid &#x25B2;</NavLink>
 			<menu className = "navbar-nav">
 				<li className = "nav-item">
 					<NavLink className = "nav-link active" to="log">Your Log</NavLink>
