@@ -1,14 +1,24 @@
 import React from 'react';
+import climbingImage from "../../public/male-climber-on-overhanging-rock-600nw-501632293.webp"
+import { useNavigate, NavLink } from 'react-router-dom';
 
-export function UpdateLog() {
+export function PostUpdateLog() {
+  const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        navigate('/UpdateLog');
+    }
   return (
     <main>
         <hr />
         <h2>Congrats for adding to your pyramid!</h2>
-        <img src="../Images/male-climber-on-overhanging-rock-600nw-501632293.webp" 
+        <img src={climbingImage} 
         alt="climbing image" width="1000" height="500"/>    
         <p>This will be an api to pull various climbing images</p>
-        <h3><a href="updateLog.html">Continue Logging</a></h3>
+        <NavLink to="/updateLog">
+          <button className="btn btn-primary">Continue Logging</button>
+        </NavLink>
     </main>
   );
 }

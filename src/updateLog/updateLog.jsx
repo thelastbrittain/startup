@@ -1,12 +1,21 @@
 import React from 'react';
 import "./updateLog.css"
+import { useNavigate } from 'react-router-dom';
 
 export function UpdateLog() {
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        navigate('/postUpdateLog');
+    }
+
+
   return (
     <main class="updateLog-main">
         <h1 class="updateLog-header">Update Your Climbing Log</h1>
         {/* <!-- Change this to a post method later --> */}
-        <form action ="/postUpdateLog" method="get" class="updateLog-form"> 
+        <form onSubmit={handleSubmit} class="updateLog-form"> 
             <div class="mb-3">
                 <label for="routeGrade" class="form-label">Route Grade: </label>
                 <select id="routeGrade" name="varrouteGrade" class="form-select">

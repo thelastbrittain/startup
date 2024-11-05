@@ -7,6 +7,7 @@ import { Log } from './log/log';
 import { Friends } from "./friends/friends"
 import { About } from "./about/about"
 import { UpdateLog } from './updateLog/updateLog'
+import { PostUpdateLog } from './postUpdateLog/postUpdateLog';
 
 
 
@@ -21,8 +22,8 @@ export default function App() {
                     <Route path="/friends" element={<Friends/>}/>
                     <Route path="/about" element={<About/>}/>
                     <Route path="/updateLog" element={<UpdateLog/>}/>
+                    <Route path="/postUpdateLog" element={<PostUpdateLog/>}/>
                     <Route path='*' element={<NotFound />} />
-                    <Route path="/postUpdateLog"/>
                 </Routes>
                 <Footer/>
             </div>
