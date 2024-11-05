@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import climbingImage from "../../public/male-climber-on-overhanging-rock-600nw-501632293.webp"
 
-export function About() {
+export function About(props) {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    setImageUrl(climbingImage);
+  }, []);
+
   return (
     <main>
         <p>
@@ -16,7 +22,7 @@ export function About() {
             have climbed and displays their efforts in a pyramid, showing them the 
             progress they really are making.
         </p>
-        <img src={climbingImage} 
+        <img src={imageUrl} 
         alt="climbing image" width="1000" height="500"/> 
     </main>
   );
