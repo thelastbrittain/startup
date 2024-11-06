@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
@@ -8,16 +8,30 @@ import { Friends } from "./friends/friends"
 import { About } from "./about/about"
 import { UpdateLog } from './updateLog/updateLog'
 import { PostUpdateLog } from './postUpdateLog/postUpdateLog';
-
+import { AuthState } from './login/authState';
 
 
 export default function App() {
+    const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+    const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
+    const [authState, setAuthState] = React.useState(currentAuthState);
+
     return( 
         <BrowserRouter>
             <div className='body bg-dark text-light'>
-                <Header/>
+                <Header authState={authState}/>
                 <Routes>
-                    <Route path="/" element={<Login/>}/>
+                    <Route path="/" element={<Login
+                        userName={userName}
+                        authState={authState}
+                        onAuthChange={(userName, authState) => {
+                        setAuthState(authState);
+                        setUserName(userName);
+                        }}
+                        />
+                        }
+                        exact
+                    />
                     <Route path="/log" element={<Log/>}/>
                     <Route path="/friends" element={<Friends/>}/>
                     <Route path="/about" element={<About/>}/>
@@ -36,21 +50,24 @@ function NotFound() {
   }
 
 
-function Header() {
+function Header({authState}) {
     return (
         <header className="container-fluid">
 			<nav className = "navbar fixed-top navbar-light bg-white">
 				<NavLink className = "navbar-brand" to="/">Pryamid &#x25B2;</NavLink>
 			<menu className = "navbar-nav">
-				<li className = "nav-item">
+                <li className = "nav-item">
+					<NavLink className = "nav-link active" to="/">Login</NavLink>
+				</li>
+                {authState === AuthState.authState && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="log">Your Log</NavLink>
-				</li>
-				<li className = "nav-item">
+				</li>)}
+				{authState === AuthState.Authenticated && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="updateLog">Update Log</NavLink>
-				</li>
-				<li className = "nav-item">
+				</li>)}
+				{authState === AuthState.Authenticated && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="friends">Friends</NavLink>
-				</li>
+				</li>)}
 				<li className = "nav-item">
 					<NavLink className = "nav-link active" to="about">About</NavLink>
 				</li>
