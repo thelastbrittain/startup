@@ -9,12 +9,14 @@ import { About } from "./about/about"
 import { UpdateLog } from './updateLog/updateLog'
 import { PostUpdateLog } from './postUpdateLog/postUpdateLog';
 import { AuthState } from './login/authState';
+import { Climber } from '../public/climber';
 
 
 export default function App() {
-    const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+    const [user, setUser] = useState(localStorage.getItem('user') || '')
+    const [userName, setUserName] = useState(user ? user.userName : '');
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
-    const [authState, setAuthState] = React.useState(currentAuthState);
+    const [authState, setAuthState] = useState(currentAuthState);
 
     return( 
         <BrowserRouter>
@@ -24,9 +26,10 @@ export default function App() {
                     <Route path="/" element={<Login
                         userName={userName}
                         authState={authState}
-                        onAuthChange={(userName, authState) => {
+                        onAuthChange={(climber, authState) => {
                         setAuthState(authState);
-                        setUserName(userName);
+                        setUser(climber)
+                        setUserName(climber.userName);
                         }}
                         />
                         }

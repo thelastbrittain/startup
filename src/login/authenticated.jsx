@@ -7,7 +7,7 @@ export function Authenticated(props) {
 
     function logout() {
         console.log("logging out")
-        localStorage.removeItem('userName');
+        localStorage.removeItem('user');
         props.onLogout();
         
     }

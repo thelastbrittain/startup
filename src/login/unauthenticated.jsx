@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Climber } from '../../public/climber';
+
 
 export function Unauthenticated(props) {
 	const [userName, setUserName] = useState(props.userName);
 	const [password, setPassword] = React.useState('');
-  const [displayError, setDisplayError] = React.useState(null);
+    const [displayError, setDisplayError] = React.useState(null);
 
 	async function loginUser() {
-		localStorage.setItem('userName', userName);
-		props.onLogin(userName);
+		const climber = new Climber(userName)
+		localStorage.setItem('user', climber);
+		props.onLogin(climber);
 	}
 
 	async function createUser() {
-		localStorage.setItem('userName', userName);
-		props.onLogin(userName);
+		const climber = new Climber(userName)
+		localStorage.setItem('user', JSON.stringify(climber));
+		props.onLogin(climber);
 	}
+
 
     return(
         <>
