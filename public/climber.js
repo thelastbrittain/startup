@@ -1,6 +1,5 @@
-import {Route} from "./route"
 import { Grade } from "./grade";
-import { Style } from "./style";
+
 
 export class Climber {
     constructor(userName){
@@ -17,7 +16,7 @@ export class Climber {
         if (this.hardestGrade.lessThan(route.grade)){
             this.hardestGrade = route.grade;
         }
-        this.latestRouteClimbed = route.Date;
+        this.latestRouteClimbed = route.date;
     }
 
 }

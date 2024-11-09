@@ -10,10 +10,42 @@ import { UpdateLog } from './updateLog/updateLog'
 import { PostUpdateLog } from './postUpdateLog/postUpdateLog';
 import { AuthState } from './login/authState';
 import { Climber } from '../public/climber';
-
+import { Style } from '../public/style';
+import { Route as ClimbingRoute } from '../public/route';
+import { Grade } from '../public/grade';
 
 export default function App() {
-    const [user, setUser] = useState(localStorage.getItem('user') || '')
+    const getUserFromLocalStorage = () => {
+        let storedUser = localStorage.getItem("user");
+        console.log(storedUser);
+        if (storedUser) {
+            storedUser = JSON.parse(storedUser);
+            const climber = new Climber(storedUser.userName);
+
+        // Restore routeList and re-instantiate each route's Grade and Style
+        climber.routeList = storedUser.routeList.map(route => {
+            return new ClimbingRoute(
+                new Grade(route.grade.prefix, route.grade.suffix), // Recreate Grade instance
+                new Style(route.style.type, route.style.subType),  // Recreate Style instance
+                new Date(route.date),                              // Convert date back to Date object
+                route.notes                                        // Restore notes
+            );
+        });
+
+        // Recreate hardestGrade as an instance of Grade
+        climber.hardestGrade = new Grade(storedUser.hardestGrade.prefix, storedUser.hardestGrade.suffix);
+
+        // Restore other properties
+        climber.numRoutesClimbed = storedUser.numRoutesClimbed; 
+        climber.latestRouteClimbed = new Date(storedUser.latestRouteClimbed); // Convert back to Date
+
+        return climber; // Return the Climber instance
+    } else {
+        return("null");
+        }
+    };
+    
+    const [user, setUser] = useState(getUserFromLocalStorage() || '')
     const [userName, setUserName] = useState(user ? user.userName : '');
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
     const [authState, setAuthState] = useState(currentAuthState);
@@ -38,7 +70,16 @@ export default function App() {
                     <Route path="/log" element={<Log/>}/>
                     <Route path="/friends" element={<Friends/>}/>
                     <Route path="/about" element={<About/>}/>
-                    <Route path="/updateLog" element={<UpdateLog/>}/>
+                    <Route path="/updateLog" element={<UpdateLog
+                    onClimberChange={(prefix, suffix, style, stlye2, notes) => {
+                        if (user && typeof user.addRoute === 'function') {
+                            user.addRoute(new ClimbingRoute(new Grade(prefix, suffix), new Style(style, stlye2), new Date(), notes)); 
+                            console.log(user);
+                        } else {
+                            console.error('addRoute method not found on user');
+                        }
+                    }}
+                    />}/>
                     <Route path="/postUpdateLog" element={<PostUpdateLog/>}/>
                     <Route path='*' element={<NotFound />} />
                 </Routes>

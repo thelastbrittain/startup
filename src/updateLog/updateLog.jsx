@@ -1,24 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./updateLog.css"
 import { useNavigate } from 'react-router-dom';
+import { Climber } from '../../public/climber';
+import { Route } from '../../public/route';
+import { Grade } from '../../public/grade';
+import { Style } from '../../public/style';
 
-export function UpdateLog() {
+export function UpdateLog({onClimberChange}) {
     const navigate = useNavigate();
+    const [style, setStyle] = useState('');
+    const [stlye2, setStyle2] = useState("None");
+    const [prefix, setPrefix] = useState('');
+    const [suffix, setSuffix] = useState('');
+    const [notes, setNotes] = useState('');
+
+    const updateClimber = () => {
+        onClimberChange(prefix, suffix, style, stlye2, notes);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        updateClimber();
         navigate('/postUpdateLog');
     }
 
+    const handleGradeChange = (event) => {
+        const gradeValue = event.target.value; // e.g., "5.10a"
+        const gradeParts = gradeValue.split('.');
+        if (gradeParts.length === 2) {
+            const numberAndLetter = gradeParts[1];
+            const numberPart = numberAndLetter.slice(0, -1); // Extract number part (e.g., "10")
+            const letterPart = numberAndLetter.slice(-1); // Extract letter part (e.g., "a")
+            setPrefix(numberPart);
+            setSuffix(letterPart);
+        }
+    };
 
+    const handleStyleChange = (event) => {
+        let selectedStyle = event.target.value;
+        if (["Onsight", "Flash", "Redpoint", "Pinkpoint", "Fell/Hung"].includes(selectedStyle)){
+            setStyle("Lead");
+            setStyle2(selectedStyle);
+        } else {
+            setStyle(selectedStyle);
+            setStyle2("None");
+        }
+    }
+
+    const handleNotesChange = (event) => {
+        setNotes(event.target.value);
+    }
+    
   return (
-    <main class="updateLog-main">
-        <h1 class="updateLog-header">Update Your Climbing Log</h1>
+    <main className="updateLog-main">
+        <h1 className="updateLog-header">Update Your Climbing Log</h1>
         {/* <!-- Change this to a post method later --> */}
-        <form onSubmit={handleSubmit} class="updateLog-form"> 
-            <div class="mb-3">
-                <label for="routeGrade" class="form-label">Route Grade: </label>
-                <select id="routeGrade" name="varrouteGrade" class="form-select">
+        <form onSubmit={handleSubmit} className="updateLog-form"> 
+            <div className="mb-3">
+                <label htmlFor="routeGrade" className="form-label">Route Grade: </label>
+                <select id="routeGrade" name="varrouteGrade" className="form-select"
+                onChange={handleGradeChange}>
                 <optgroup label="Sub 10">
                     <option>5.6</option>
                     <option>5.7</option>
@@ -46,9 +87,10 @@ export function UpdateLog() {
                 </select>    
             </div>
 
-            <div class="mb-3">
-                <label for="Style" class="form-label">Style:</label>
-                <select id="Style" name="varStyle" class="form-select">
+            <div className="mb-3">
+                <label htmlFor="Style" className="form-label">Style:</label>
+                <select id="Style" name="varStyle" className="form-select"
+                onChange={handleStyleChange}>
                     <option>Solo</option>
                     <option>TR</option>
                     <option>Follow</option>
@@ -62,11 +104,12 @@ export function UpdateLog() {
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="routeNotes" class="form-label">Additional Notes: </label>
-                <textarea id="routeNotes" name="varrouteNotes" class="form-control" rows="4" placeholder="Enter any notes"></textarea>
+            <div className="mb-3">
+                <label htmlFor="routeNotes" className="form-label">Additional Notes: </label>
+                <textarea id="routeNotes" name="varrouteNotes" className="form-control" rows="4" placeholder="Enter any notes"
+                onChange={handleNotesChange}></textarea>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
+            <button type="submit" className="btn btn-primary w-100">Submit</button>
         </form>
     </main>
   );
