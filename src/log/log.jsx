@@ -29,6 +29,7 @@ export function Log({climber}) {
     const [grades, setGrades] = useState([]);
     useEffect(() => {
         let sortedGrades = [];
+        climber = JSON.parse(localStorage.getItem("user"));
         const Routes = climber.routeList;
         for (let i = 0; i < Routes.length; i++){
         sortedGrades.push(Routes[i].grade.prefix + Routes[i].grade.suffix)

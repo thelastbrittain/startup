@@ -61,6 +61,10 @@ export default function App() {
 		localStorage.setItem("climbers", JSON.stringify(climbers));
     }
 
+    const updateLocalClimber = () => {
+        localStorage.setItem("user", JSON.stringify(user));
+    }
+
     return( 
         <BrowserRouter>
             <div className='body bg-dark text-light'>
@@ -86,6 +90,7 @@ export default function App() {
                         if (user && typeof user.addRoute === 'function') {
                             user.addRoute(new ClimbingRoute(new Grade(prefix, suffix), new Style(style, stlye2), new Date(), notes)); 
                             updateLocalList();
+                            updateLocalClimber();
                         } else {
                             console.error('addRoute method not found on user');
                         }
@@ -114,7 +119,7 @@ function Header({authState}) {
                 <li className = "nav-item">
 					<NavLink className = "nav-link active" to="/">Login</NavLink>
 				</li>
-                {authState === AuthState.authState && (<li className = "nav-item">
+                {authState === AuthState.Authenticated && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="log">Your Log</NavLink>
 				</li>)}
 				{authState === AuthState.Authenticated && (<li className = "nav-item">
