@@ -8,13 +8,14 @@ import { Style } from '../../public/style';
 
 export function UpdateLog({onClimberChange}) {
     const navigate = useNavigate();
-    const [style, setStyle] = useState('');
+    const [style, setStyle] = useState('Solo');
     const [stlye2, setStyle2] = useState("None");
-    const [prefix, setPrefix] = useState('');
+    const [prefix, setPrefix] = useState('6');
     const [suffix, setSuffix] = useState('');
     const [notes, setNotes] = useState('');
 
     const updateClimber = () => {
+        console.log(prefix, suffix, style, stlye2, notes)
         onClimberChange(prefix, suffix, style, stlye2, notes);
     }
 

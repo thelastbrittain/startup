@@ -1,45 +1,94 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "./log.css"
 
-export function Log() {
+export function Log({climber}) {
+    function parseGrade(grade) {
+        const numberPart = parseInt(grade); // Extract numeric part
+        const letterPart = grade.match(/[a-zA-Z]/) ? grade.match(/[a-zA-Z]/)[0] : ''; // Extract letter part if it exists
+        return { numberPart, letterPart };
+    }
+    
+    // Custom sort function
+    function compareGrades(grade1, grade2) {
+        const { numberPart: num1, letterPart: let1 } = parseGrade(grade1);
+        const { numberPart: num2, letterPart: let2 } = parseGrade(grade2);
+    
+        // First, compare by number (descending order)
+        if (num1 !== num2) {
+            return num2 - num1; // Higher numbers come first
+        }
+    
+        // If numbers are equal, compare by letter (descending alphabetical order)
+        if (let1 !== let2) {
+            return let2.localeCompare(let1); // Higher letters come first ('d' > 'a')
+        }
+    
+        return 0; // If both number and letter are equal
+    }
+
+    const [grades, setGrades] = useState([]);
+    useEffect(() => {
+        let sortedGrades = [];
+        const Routes = climber.routeList;
+        for (let i = 0; i < Routes.length; i++){
+        sortedGrades.push(Routes[i].grade.prefix + Routes[i].grade.suffix)
+        }
+        sortedGrades = sortedGrades.sort(compareGrades);
+        console.log("These are the sorted Grades", sortedGrades);
+        setGrades(sortedGrades);
+    }, []);
+
+    // Now i just need to make the rows 
+    const gradeRows = [];
+    let i = 0;
+
+    while (i < grades.length) {
+        let rowVal = grades[i];  // Get the current grade
+        let rowLength = 1;       // Initialize the count for this row
+        let j = i + 1;
+
+        // Check for consecutive grades that are the same
+        while (j < grades.length && grades[i] === grades[j]) {
+            rowLength += 1;
+            j += 1;
+        }
+
+        // Create a new Row component and push it to gradeRows
+        const currentRow = <Row key={i} numOfCirlces={rowLength} grade={`5.${rowVal}`} />;
+        gradeRows.push(currentRow);
+
+        // Move i to j to process the next unique grade
+        i = j;
+    }
+    const topFiveRows = gradeRows.slice(0,5);
+    
   return (
     <>
-      <main class="log-main">
-        <h1 class="log-header">Welcome to your log</h1>
-        <div class="pyramid"></div>
-            <div class="row">
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.9</text>
-                </svg>
-            </div>
-            <div class="row">
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.8</text>
-                </svg>
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.8</text>
-                </svg>
-            </div>
-
-            <div class="row">
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.7</text>
-                </svg>
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.7</text>
-                </svg>
-                <svg width="50" height="50">
-                    <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
-                    <text x="25" y="30" font-size="15" text-anchor="middle" fill="black">5.7</text>
-                </svg>
-            </div>
+      <main className="log-main">
+        <h1 className="log-header">Welcome to your log</h1>
+        <div className="pyramid"></div>
+        {topFiveRows}
         <p>(This is websocket data that will be updated in real time)</p>
     </main>
     </>
   );
+
+}
+
+function Circle({grade}) {
+    return (
+        <svg width="50" height="50">
+            <circle cx="25" cy="25" r="20" fill="white" stroke="black"/>
+            <text x="25" y="30" fontSize="15" textAnchor="middle" fill="black">{grade}</text>
+        </svg>
+    )
+}
+
+function Row({numOfCirlces, grade}){
+    let listOfCirlces = [];
+    for (let i = 0; i < numOfCirlces; i++){
+        listOfCirlces.push(<Circle key={i} grade={grade}/>);
+    }
+    return (<div className="row">{listOfCirlces}</div>
+    );
 }

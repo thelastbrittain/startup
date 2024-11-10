@@ -17,12 +17,12 @@ import { Grade } from '../public/grade';
 export default function App() {
     const getUserFromLocalStorage = () => {
         let storedUser = localStorage.getItem("user");
-        console.log(storedUser);
         if (storedUser) {
             storedUser = JSON.parse(storedUser);
             const climber = new Climber(storedUser.userName);
 
         // Restore routeList and re-instantiate each route's Grade and Style
+        // console.log("In App, this is routeList:", storedUser.routeList);
         climber.routeList = storedUser.routeList.map(route => {
             return new ClimbingRoute(
                 new Grade(route.grade.prefix, route.grade.suffix), // Recreate Grade instance
@@ -53,10 +53,8 @@ export default function App() {
     const updateLocalList = () => {
         let climbers = JSON.parse(localStorage.getItem('climbers')) || [];
         for (let i = 0; i < climbers.length; i++){
-            console.log("Hello");
             if (climbers[i].userName === userName){
                 climbers[i] = user;
-                console.log("Replaces");
                 break;
             }
         }
@@ -80,7 +78,7 @@ export default function App() {
                         }
                         exact
                     />
-                    <Route path="/log" element={<Log/>}/>
+                    <Route path="/log" element={<Log climber={user}/>}/>
                     <Route path="/friends" element={<Friends/>}/>
                     <Route path="/about" element={<About/>}/>
                     <Route path="/updateLog" element={<UpdateLog
