@@ -10,6 +10,7 @@ export function Unauthenticated(props) {
 	async function loginUser() {
 		const climber = new Climber(userName)
 		localStorage.setItem('user', JSON.stringify(climber));
+		updateLocalStorageList(climber);
 		props.onLogin(climber);
 	}
 

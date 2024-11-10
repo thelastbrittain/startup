@@ -47,3 +47,35 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
  - [x] **Application elements ** - Used good contrast and whitespace
  - [x] **Application text content **- Consistent fonts
  - [x] **Application images **- Added an image in the about page
+
+ ## React deliverable
+ - [x] **Bundled and transpiled **
+ - [x] **Components - Login, UpdateLog, PostUpdateLog, Friends, are all components with mocks for login, WebSocket.
+      - login - When you press enter or the login button it takes you to the login/log page
+      - updatelog - Puts form info in local storage
+      - postUpdate log - Simulates pulling from an api
+      - friends - Shows highlights from friends
+      - about - Simulates pulling from API
+ - [x] **Websocket - used useEffect to mock pulling data from websocket on the log page
+ - [x] **Application logic - extensive logic to display the pyramid correctly
+ - [x] **Router - Routing between login and voting components.
+ - [x] **Hooks - Used useState, useNavigate, and useEffect all throughout the project
+
+
+
+<!-- 
+React deliverable
+➡️ The following is an example of the required information for the Startup React deliverable
+
+For this deliverable I used JavaScript and React so that the application completely works for a single user. I also added placeholders for future technology.
+
+ Bundled and transpiled - done!
+ Components - Login, voting list, vote are all components with mocks for login, WebSocket.
+ login - When you press enter or the login button it takes you to the voting page.
+ database - Displayed the voting counts. Currently this is stored and retrieved from local storage, but it will be replaced with the database data later.
+ WebSocket - I used the setInterval function to periodically increase a random vote count. This will be replaced with WebSocket messages later.
+ application logic - The highlight and ranking number change based up the user's selections.
+ Router - Routing between login and voting components.
+ Hooks - Vue uses class properties instead of UseState to track changes in vote state.
+
+ -->
