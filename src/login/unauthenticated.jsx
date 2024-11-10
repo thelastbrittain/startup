@@ -16,22 +16,30 @@ export function Unauthenticated(props) {
 	async function createUser() {
 		const climber = new Climber(userName)
 		localStorage.setItem('user', JSON.stringify(climber));
+		updateLocalStorageList(climber);
 		props.onLogin(climber);
+	}
+
+	async function updateLocalStorageList(climber){
+		let climbers = JSON.parse(localStorage.getItem('climbers')) || [];
+		climbers.push(climber);
+		localStorage.setItem("climbers", JSON.stringify(climbers));
+
 	}
 
 
     return(
         <>
-					<div className = "input-group mb-3">
-						<span className="input-group-text">@</span>
-						<input className="form-control" type="text" placeholder="email" value={userName} onChange={(e) => setUserName(e.target.value)}/>
-					</div>
-					<div className="input-group mb-3">
-						<span className="input-group-text">🔒</span>
-						<input className="form-control" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-					</div>
-					<button className="btn btn-primary" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
-					<button className="btn btn-secondary" onClick={() => createUser()} disabled={!userName || !password}>Create</button>
+			<div className = "input-group mb-3">
+				<span className="input-group-text">@</span>
+				<input className="form-control" type="text" placeholder="email" value={userName} onChange={(e) => setUserName(e.target.value)}/>
+			</div>
+			<div className="input-group mb-3">
+				<span className="input-group-text">🔒</span>
+				<input className="form-control" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+			</div>
+			<button className="btn btn-primary" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
+			<button className="btn btn-secondary" onClick={() => createUser()} disabled={!userName || !password}>Create</button>
         </>
     )
 }

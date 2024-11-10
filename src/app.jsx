@@ -50,6 +50,19 @@ export default function App() {
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
     const [authState, setAuthState] = useState(currentAuthState);
 
+    const updateLocalList = () => {
+        let climbers = JSON.parse(localStorage.getItem('climbers')) || [];
+        for (let i = 0; i < climbers.length; i++){
+            console.log("Hello");
+            if (climbers[i].userName === userName){
+                climbers[i] = user;
+                console.log("Replaces");
+                break;
+            }
+        }
+		localStorage.setItem("climbers", JSON.stringify(climbers));
+    }
+
     return( 
         <BrowserRouter>
             <div className='body bg-dark text-light'>
@@ -74,7 +87,7 @@ export default function App() {
                     onClimberChange={(prefix, suffix, style, stlye2, notes) => {
                         if (user && typeof user.addRoute === 'function') {
                             user.addRoute(new ClimbingRoute(new Grade(prefix, suffix), new Style(style, stlye2), new Date(), notes)); 
-                            console.log(user);
+                            updateLocalList();
                         } else {
                             console.error('addRoute method not found on user');
                         }
