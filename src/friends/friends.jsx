@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function Friends() {
+export function Friends({props}) {
   const [climbers, setClimbers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/friendInfo")
+    fetch(`/api/friendInfo/${encodeURIComponent(props.userName)}`)
     .then((response) => response.json())
     .then((climbers) => {
       setClimbers(climbers);

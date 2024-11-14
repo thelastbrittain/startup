@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import "./log.css"
 
-export function Log({climber}) {
+export function Log({props}) {
     const [topFiveRows, setTopFiveRows] = useState([]);
 
     useEffect(() => {
-        fetch("/api/userLog")
+        fetch(`/api/userLog/${encodeURIComponent(props.userName)}`)
         .then((response) => response.json())
         .then((grades) => {
             let gradesList = []

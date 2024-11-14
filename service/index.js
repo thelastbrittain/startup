@@ -64,12 +64,12 @@ apiRouter.delete('/auth/logout', (req, res) => {
 // returns an empty body
 apiRouter.post('/auth/logRoute', async (req, res) => {
     console.log("in /auth/logRoute")
-    const user = users[req.body.email];
-    if (user in users) {
-        users[user].climbingInfo.routeList.push((req.body.route)); // add route to the list
-        users[user].climbingInfo.numRoutesClimbed += 1; // update num of routes climbed
-        users[user].climbingInfo.latestRouteClimbed = req.body.route.date; // update date of most recent climb
-        updateHardestRoute(user, req.body.route); // update hardest route 
+    const email = users[req.body.email];
+    if (email in users) {
+        users[email].climbingInfo.routeList.push((req.body.route)); // add route to the list
+        users[email].climbingInfo.numRoutesClimbed += 1; // update num of routes climbed
+        users[email].climbingInfo.latestRouteClimbed = req.body.route.date; // update date of most recent climb
+        updateHardestRoute(email, req.body.route); // update hardest route 
         res.send({});
         return;
       };
@@ -80,9 +80,9 @@ apiRouter.post('/auth/logRoute', async (req, res) => {
 // Get Friends
 // Takes a username
 // returns climbing info for each person other than the username requesting it
-apiRouter.get('/friendInfo', (req, res) => {
+apiRouter.get('/friendInfo:userName', (req, res) => {
     console.log("In /friendInfo");
-    const userName = req.body.userName;
+    const userName = req.query.userName;
     if (userName in users){
         climbingInfoList = [];
         for (const [key, value] of Object.entries(users)){

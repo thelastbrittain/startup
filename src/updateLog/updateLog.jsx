@@ -6,24 +6,38 @@ import { Route } from '../../public/route';
 import { Grade } from '../../public/grade';
 import { Style } from '../../public/style';
 
-export function UpdateLog({onClimberChange}) {
+export function UpdateLog({props}) {
     const navigate = useNavigate();
     const [style, setStyle] = useState('Solo');
-    const [stlye2, setStyle2] = useState("None");
+    const [style2, setStyle2] = useState("None");
     const [prefix, setPrefix] = useState('6');
     const [suffix, setSuffix] = useState('');
     const [notes, setNotes] = useState('');
-
-    const updateClimber = () => {
-        console.log(prefix, suffix, style, stlye2, notes)
-        onClimberChange(prefix, suffix, style, stlye2, notes);
-    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         updateClimber();
         navigate('/postUpdateLog');
     }
+    
+    async function updateClimber() {
+        const response = await fetch(`/api/auth/logRoute`, {
+          method: 'post',
+          body: JSON.stringify({ email: props.userName, 
+                                route: {"prefix": prefix, 
+                                    "suffix": suffix, "style": style, 
+                                    "style2": style2, "notes": notes}}),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+        if (response?.status === 200) {
+            console.log("Success");
+        } else {
+          const body = await response.json();
+          console.log(`⚠ Error: ${body.msg}`);
+        }
+      }
 
     const handleGradeChange = (event) => {
         const gradeValue = event.target.value; // e.g., "5.10a"

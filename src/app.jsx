@@ -82,20 +82,10 @@ export default function App() {
                         }
                         exact
                     />
-                    <Route path="/log" element={<Log climber={user}/>}/>
-                    <Route path="/friends" element={<Friends/>}/>
+                    <Route path="/log" element={<Log userName={userName}/>}/>
+                    <Route path="/friends" element={<Friends userName={userName}/>}/>
                     <Route path="/about" element={<About/>}/>
-                    <Route path="/updateLog" element={<UpdateLog
-                    onClimberChange={(prefix, suffix, style, stlye2, notes) => {
-                        if (user && typeof user.addRoute === 'function') {
-                            user.addRoute(new ClimbingRoute(new Grade(prefix, suffix), new Style(style, stlye2), new Date(), notes)); 
-                            updateLocalList();
-                            updateLocalClimber();
-                        } else {
-                            console.error('addRoute method not found on user');
-                        }
-                    }}
-                    />}/>
+                    <Route path="/updateLog" element={<UpdateLog userName={userName}/>}/>
                     <Route path="/postUpdateLog" element={<PostUpdateLog/>}/>
                     <Route path='*' element={<NotFound />} />
                 </Routes>
