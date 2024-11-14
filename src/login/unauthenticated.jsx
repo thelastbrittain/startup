@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Climber } from '../../public/climber';
+import { MessageDialog } from './messageDialog';
 
 
 export function Unauthenticated(props) {
@@ -8,26 +9,29 @@ export function Unauthenticated(props) {
     const [displayError, setDisplayError] = React.useState(null);
 
 	async function loginUser() {
-		const climber = new Climber(userName)
-		localStorage.setItem('user', JSON.stringify(climber));
-		updateLocalStorageList(climber);
-		props.onLogin(climber);
+		loginOrCreate(`/api/auth/login`);
 	}
 
 	async function createUser() {
-		const climber = new Climber(userName)
-		localStorage.setItem('user', JSON.stringify(climber));
-		updateLocalStorageList(climber);
-		props.onLogin(climber);
+		loginOrCreate(`api/auth/create`);
 	}
 
-	async function updateLocalStorageList(climber){
-		let climbers = JSON.parse(localStorage.getItem('climbers')) || [];
-		climbers.push(climber);
-		localStorage.setItem("climbers", JSON.stringify(climbers));
-
+	async function loginOrCreate(endpoint) {
+		const response = await fetch(endpoint, {
+			method: "post",
+			body: JSON.stringify({ email: userName, password: password }),
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+			},
+		});
+		if (response?.status === 200) {
+			localStorage.setItem('userName', userName);
+			props.onLogin(userName);
+		} else {
+			const body = await response.json();
+			setDisplayError(`⚠ Error: ${body.msg}`)
+		}
 	}
-
 
     return(
         <>
@@ -41,6 +45,8 @@ export function Unauthenticated(props) {
 			</div>
 			<button className="btn btn-primary" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
 			<button className="btn btn-secondary" onClick={() => createUser()} disabled={!userName || !password}>Create</button>
+
+			<MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
         </>
     )
 }

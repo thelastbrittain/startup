@@ -2,7 +2,7 @@ const express = require('express');
 const uuid = require('uuid');
 const app = express();
 
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // allow to pull from public files
 app.use(express.static('public'));
@@ -15,7 +15,7 @@ var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 /* Data Structures */
-let users = [];
+let users = {};
 
 /* 
 A climber looks like: 
@@ -52,15 +52,45 @@ user = {userName: "AdamOndra@sendhard.com", password: "iClimb", authToken: "1234
 
 
 
-/*  ENDPOINTS */ 
+/*  ENDPOINTS  
 
-// Create Account /auth/create
-// takes username and password
-// if user not already found
-// creates auth
-// create user using uname, password, and auth
-// puts him into the list of users
-// returns the token
+Create Account /auth/create
+takes username and password
+if user not already found
+creates auth
+create user using uname, password, and auth
+created basic climber object 
+puts him into the list of users
+returns the token
+
+*/
+
+apiRouter.post('/auth/create', async (req, res) => {
+    console.log("In auth/create")
+    const user = users[req.body.email];
+    if (user) {
+      res.status(409).send({ msg: 'Existing user' });
+    } else {
+      const user = { email: req.body.email, password: req.body.password, token: uuid.v4(), climbingInfo: createClimber()};
+      users[user.email] = user;
+  
+      res.send({ token: user.token });
+    }
+  });
+
+
+function createClimber() {
+     return ({"routeList": [],
+            "hardestGrade": "",
+            "numRoutesClimbed": 0,
+            "latestRouteClimbed": ""})
+    }
+
+  //This is just a test. Don't implement this
+  apiRouter.get('/users', (_req, res) => {
+    console.log("In /users");
+    res.send(users);
+  });
 
 
 // Login /auth/login
@@ -96,6 +126,8 @@ user = {userName: "AdamOndra@sendhard.com", password: "iClimb", authToken: "1234
 // if that user is in users
 // send back that user's routes
 
-
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
 
 
