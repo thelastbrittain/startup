@@ -1,20 +1,15 @@
 {
   "name": "service",
   "version": "1.0.0",
+  "description": "This demonstrates a service for a web application.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-     "start": "node index.js"
+    "start": "node index.js"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "vite": "^5.4.11"
-  },
+  "license": "MIT",
   "dependencies": {
     "express": "^4.21.1",
-    "uuid": "^11.0.3"
+    "uuid": "^10.0.0"
   }
 }

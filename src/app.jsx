@@ -73,10 +73,10 @@ export default function App() {
                     <Route path="/" element={<Login
                         userName={userName}
                         authState={authState}
-                        onAuthChange={(climber, authState) => {
+                        onAuthChange={(user, authState) => {
                         setAuthState(authState);
-                        setUser(climber)
-                        setUserName(climber.userName);
+                        setUser(user)
+                        setUserName(user.userName);
                         }}
                         />
                         }

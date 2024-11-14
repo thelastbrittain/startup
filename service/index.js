@@ -2,20 +2,23 @@ const express = require('express');
 const uuid = require('uuid');
 const app = express();
 
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
+/* Data Structures */
+let users = {"testUser": {"userName": "TestUsername", "password": "testPassword"}};
 
-// allow to pull from public files
-app.use(express.static('public'));
+// service port
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // automatically parse JSON --middleware
 app.use(express.json());
+
+// allow to pull from public files
+app.use(express.static('public'));
 
 // modularize routes for service endpoints
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-/* Data Structures */
-let users = {};
+
 
 /* 
 A climber looks like: 
@@ -30,7 +33,7 @@ Methods = addRoute
 
 Route Looks like: route = {grade: {prefix: "11", suffix: "b"}, 
                             style: {type1: "Lead", type2: "PinkPoint"}, 
-                            data: {10-14-2001}, 
+                            date: {10-14-2001}, 
                             notes: "Great."
                             }
 Methods: None
@@ -54,37 +57,97 @@ user = {userName: "AdamOndra@sendhard.com", password: "iClimb", authToken: "1234
 
 /*  ENDPOINTS  
 
-Create Account /auth/create
-takes username and password
-if user not already found
-creates auth
-create user using uname, password, and auth
-created basic climber object 
-puts him into the list of users
-returns the token
-
 */
 
+// if not existing, create new user
 apiRouter.post('/auth/create', async (req, res) => {
     console.log("In auth/create")
     const user = users[req.body.email];
     if (user) {
       res.status(409).send({ msg: 'Existing user' });
     } else {
-      const user = { email: req.body.email, password: req.body.password, token: uuid.v4(), climbingInfo: createClimber()};
+      const user = { email: req.body.email, password: req.body.password, token: uuid.v4(), climbingInfo: createClimber(req.body.email)};
       users[user.email] = user;
   
       res.send({ token: user.token });
     }
   });
 
-
-function createClimber() {
-     return ({"routeList": [],
-            "hardestGrade": "",
-            "numRoutesClimbed": 0,
-            "latestRouteClimbed": ""})
+// GetAuth login an existing user
+apiRouter.post('/auth/login', async (req, res) => {
+    console.log("in /auth/login")
+    const user = users[req.body.email];
+    if (user) {
+      if (req.body.password === user.password) {
+        user.token = uuid.v4();
+        res.send({ token: user.token });
+        return;
+      }
     }
+    res.status(401).send({ msg: 'Unauthorized' });
+  });
+
+// DeleteAuth logout a user
+apiRouter.delete('/auth/logout', (req, res) => {
+    const user = Object.values(users).find((u) => u.token === req.body.token);
+    if (user) {
+      delete user.token;
+    }
+    res.status(204).end();
+  });
+
+// Log Route /log 
+// takes a route and userName
+// adds route to userName given
+// returns an empty body
+apiRouter.post('/auth/logRoute', async (req, res) => {
+    console.log("in /auth/logRoute")
+    const user = users[req.body.email];
+    if (user in users) {
+        users[user].climbingInfo.routeList.push((req.body.route)); // add route to the list
+        users[user].climbingInfo.numRoutesClimbed += 1; // update num of routes climbed
+        users[user].climbingInfo.latestRouteClimbed = req.body.route.date; // update date of most recent climb
+        updateHardestRoute(user, req.body.route); // update hardest route 
+        res.send({});
+        return;
+      };
+    res.status(401).send({ msg: 'Incorrect data' });
+  });
+
+
+// Get Friends
+// Takes a username
+// returns climbing info for each person other than the username requesting it
+apiRouter.get('/friendInfo', (req, res) => {
+    console.log("In /friendInfo");
+    const userName = req.body.userName;
+    if (userName in users){
+        climbingInfoList = [];
+        for (const [key, value] of Object.entries(users)){
+            if (key !== userName){
+                climbingInfoList.push(value.climbingInfo)
+            }
+        }
+        res.send(climbingInfoList);
+    } else {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
+  });
+
+
+// userLog
+// take a userName
+// Returns routeList of that user
+apiRouter.get('/userLog', (req, res) => {
+    console.log("In /userLog");
+    userName = req.body.userName
+    if (userName in users){
+        res.send(users[userName].climbingInfo.routeList);
+    } else {
+        res.status(401).send({ msg: 'User Not Found' });
+    }
+  });
+
 
   //This is just a test. Don't implement this
   apiRouter.get('/users', (_req, res) => {
@@ -92,42 +155,38 @@ function createClimber() {
     res.send(users);
   });
 
-
-// Login /auth/login
-// takes a username and password
-// if the user exists
-// if the password is correct
-// generate and place in the user the correct auth
-// return the auth
-// otherwise send a 401
-
-
-// Logout /auth.logout
-// takes an auth
-// finds the user with that auth
-// deletes the auth
-// send back 204
-
-// Log Route /log 
-// takes an auth token and a route
-// finds the user with the auth
-// adds the route to the climber
-// updates most recent climb
-// potentially updates the hardest climb
-
-
-// Get Friends
-// takes an auth
-// if authenticated
-// returns user objects with the needed information
-
-// Show Log
-// takes a username
-// if that user is in users
-// send back that user's routes
-
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
 
 
+function updateHardestRoute(user, route){
+    // if hardest, update hardest
+    if (greaterThan(users[user].climbingInfo.hardestGrade), route.grade){
+        return;
+    } 
+    users[user].climbingInfo.hardestGrade = route.grade;
+    
+}
+
+function createClimber(email) {
+    return ({"userName": email, 
+        "routeList": [],
+        "hardestGrade": "",
+        "numRoutesClimbed": 0,
+        "latestRouteClimbed": ""})
+}
+
+function greaterThan(currentGrade, newGrade) {
+    if (currentGrade.prefix < newGrade.prefix) {
+        return false;
+    } else if (currentGrade.prefix > newGrade.prefix) {
+        return true;
+    } else {
+        if (currentGrade.suffix <= newGrade.suffix){
+            return false;
+        } else {
+            return true;
+        }
+    }
+}

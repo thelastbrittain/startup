@@ -3,6 +3,16 @@ import climbingImage from "../../public/male-climber-on-overhanging-rock-600nw-5
 
 export function About(props) {
   const [imageUrl, setImageUrl] = useState("");
+  const [test, setTest] = useState({});
+  
+  useEffect(() => {
+    fetch('/api/users')
+      .then((response) => response.json())
+      .then((users) => {
+        setTest(users);
+      });
+      console.log(test);
+  }, []);
 
   useEffect(() => {
     setImageUrl(climbingImage);

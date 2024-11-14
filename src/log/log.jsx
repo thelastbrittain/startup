@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import "./log.css"
 
 export function Log({climber}) {
+    const [grades, setGrades] = useState([]);
+    
     function parseGrade(grade) {
         const numberPart = parseInt(grade); // Extract numeric part
         const letterPart = grade.match(/[a-zA-Z]/) ? grade.match(/[a-zA-Z]/)[0] : ''; // Extract letter part if it exists
@@ -26,7 +28,7 @@ export function Log({climber}) {
         return 0; // If both number and letter are equal
     }
 
-    const [grades, setGrades] = useState([]);
+    
     useEffect(() => {
         let sortedGrades = [];
         climber = JSON.parse(localStorage.getItem("user"));

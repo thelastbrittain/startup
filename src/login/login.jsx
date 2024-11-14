@@ -14,8 +14,8 @@ export function Login({userName, authState,  onAuthChange}) {
 		{authState === AuthState.Unauthenticated && (
           <Unauthenticated
             userName={userName}
-            onLogin={(climber) => {
-              onAuthChange(climber, AuthState.Authenticated);
+            onLogin={(user) => {
+              onAuthChange(user, AuthState.Authenticated);
             }}
           />
         )}
