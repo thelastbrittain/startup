@@ -9,61 +9,11 @@ import { About } from "./about/about"
 import { UpdateLog } from './updateLog/updateLog'
 import { PostUpdateLog } from './postUpdateLog/postUpdateLog';
 import { AuthState } from './login/authState';
-import { Climber } from '../public/climber';
-import { Style } from '../public/style';
-import { Route as ClimbingRoute } from '../public/route';
-import { Grade } from '../public/grade';
 
 export default function App() {
-    const getUserFromLocalStorage = () => {
-        let storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            storedUser = JSON.parse(storedUser);
-            const climber = new Climber(storedUser.userName);
-
-        // Restore routeList and re-instantiate each route's Grade and Style
-        // console.log("In App, this is routeList:", storedUser.routeList);
-        climber.routeList = storedUser.routeList.map(route => {
-            return new ClimbingRoute(
-                new Grade(route.grade.prefix, route.grade.suffix), // Recreate Grade instance
-                new Style(route.style.type, route.style.subType),  // Recreate Style instance
-                new Date(route.date),                              // Convert date back to Date object
-                route.notes                                        // Restore notes
-            );
-        });
-
-        // Recreate hardestGrade as an instance of Grade
-        climber.hardestGrade = new Grade(storedUser.hardestGrade.prefix, storedUser.hardestGrade.suffix);
-
-        // Restore other properties
-        climber.numRoutesClimbed = storedUser.numRoutesClimbed; 
-        climber.latestRouteClimbed = new Date(storedUser.latestRouteClimbed); // Convert back to Date
-
-        return climber; // Return the Climber instance
-    } else {
-        return("null");
-        }
-    };
-    
-    const [user, setUser] = useState(getUserFromLocalStorage() || '')
-    const [userName, setUserName] = useState(user ? user.userName : '');
+    const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
     const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
     const [authState, setAuthState] = useState(currentAuthState);
-
-    const updateLocalList = () => {
-        let climbers = JSON.parse(localStorage.getItem('climbers')) || [];
-        for (let i = 0; i < climbers.length; i++){
-            if (climbers[i].userName === userName){
-                climbers[i] = user;
-                break;
-            }
-        }
-		localStorage.setItem("climbers", JSON.stringify(climbers));
-    }
-
-    const updateLocalClimber = () => {
-        localStorage.setItem("user", JSON.stringify(user));
-    }
 
     return( 
         <BrowserRouter>
@@ -75,7 +25,6 @@ export default function App() {
                         authState={authState}
                         onAuthChange={(user, authState) => {
                         setAuthState(authState);
-                        setUser(user)
                         setUserName(user.userName);
                         }}
                         />
