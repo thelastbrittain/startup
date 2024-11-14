@@ -19,45 +19,7 @@ var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 
-
-/* 
-A climber looks like: 
-climber = {userName: "Adam Ondra", 
-        routeList: [{grade: {prefix: "11", suffix: "b"}, style: {type1: "Lead", type2: "PinkPoint"}, data: {10-14-2001}, notes: "Great."},
-                    {grade: {prefix: "13", suffix: "b"}, style: {type1: "TopRope", type2: """}, data: {10-14-2001}, notes: "Epic."}],
-        hardestGrade: {prefix: "15", suffix: "d"},
-        numRoutesClimbed: 2543,
-        latestRouteClimbed: {11-11-2024}
-        }
-Methods = addRoute
-
-Route Looks like: route = {grade: {prefix: "11", suffix: "b"}, 
-                            style: {type1: "Lead", type2: "PinkPoint"}, 
-                            date: {10-14-2001}, 
-                            notes: "Great."
-                            }
-Methods: None
-
-Grade looks like; grade = {prefix: "11", 
-                            suffix: "b"}
-Methods: greaterThan, lessThan, equalTo
-
-//maybe users should be like: This way the climbing info can still be a part of the user, but it's in a different level 
-user = {userName: "AdamOndra@sendhard.com", password: "iClimb", authToken: "12345", climbingInfo: {
-        routeList: [{grade: {prefix: "11", suffix: "b"}, style: {type1: "Lead", type2: "PinkPoint"}, data: {10-14-2001}, notes: "Great."},
-                    {grade: {prefix: "13", suffix: "b"}, style: {type1: "TopRope", type2: """}, data: {10-14-2001}, notes: "Epic."}],
-        hardestGrade: {prefix: "15", suffix: "d"},
-        numRoutesClimbed: 2543,
-        latestRouteClimbed: {11-11-2024}
-        }
-}
-*/
-
-
-
-/*  ENDPOINTS  
-
-*/
+/*  ENDPOINTS  */
 
 // if not existing, create new user
 apiRouter.post('/auth/create', async (req, res) => {
@@ -155,10 +117,8 @@ apiRouter.get('/userLog', (req, res) => {
     res.send(users);
   });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
 
+/* Helper Functions */
 
 function updateHardestRoute(user, route){
     // if hardest, update hardest
@@ -190,3 +150,45 @@ function greaterThan(currentGrade, newGrade) {
         }
     }
 }
+
+/* Start Listening */
+
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+
+
+
+
+/* 
+A climber looks like: 
+climber = {userName: "Adam Ondra", 
+        routeList: [{grade: {prefix: "11", suffix: "b"}, style: {type1: "Lead", type2: "PinkPoint"}, data: {10-14-2001}, notes: "Great."},
+                    {grade: {prefix: "13", suffix: "b"}, style: {type1: "TopRope", type2: """}, data: {10-14-2001}, notes: "Epic."}],
+        hardestGrade: {prefix: "15", suffix: "d"},
+        numRoutesClimbed: 2543,
+        latestRouteClimbed: {11-11-2024}
+        }
+Methods = addRoute
+
+Route Looks like: route = {grade: {prefix: "11", suffix: "b"}, 
+                            style: {type1: "Lead", type2: "PinkPoint"}, 
+                            date: {10-14-2001}, 
+                            notes: "Great."
+                            }
+Methods: None
+
+Grade looks like; grade = {prefix: "11", 
+                            suffix: "b"}
+Methods: greaterThan, lessThan, equalTo
+
+//maybe users should be like: This way the climbing info can still be a part of the user, but it's in a different level 
+user = {userName: "AdamOndra@sendhard.com", password: "iClimb", authToken: "12345", climbingInfo: {
+        routeList: [{grade: {prefix: "11", suffix: "b"}, style: {type1: "Lead", type2: "PinkPoint"}, data: {10-14-2001}, notes: "Great."},
+                    {grade: {prefix: "13", suffix: "b"}, style: {type1: "TopRope", type2: """}, data: {10-14-2001}, notes: "Epic."}],
+        hardestGrade: {prefix: "15", suffix: "d"},
+        numRoutesClimbed: 2543,
+        latestRouteClimbed: {11-11-2024}
+        }
+}
+*/
