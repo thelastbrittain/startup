@@ -13,11 +13,20 @@ export function Friends() {
     console.log(climberList);
   }, []);
 
+  useEffect(() => {
+    fetch("/api/friendInfo")
+    .then((response) => response.json())
+    .then((climbers) => {
+      setClimbers(climbers);
+    });
+  }, []);
+
+
   const handleRowClick = () => {
     navigate("/log");
   }
 
-  // Demonstrates rendering an array with React
+
   const climberRows = [];
   if (climbers.length) {
     for (const [i, climber] of climbers.entries()) {
