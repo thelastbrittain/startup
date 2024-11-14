@@ -2,8 +2,34 @@ import React, {useEffect, useState} from 'react';
 import "./log.css"
 
 export function Log({climber}) {
-    const [grades, setGrades] = useState([]);
+    const [topFiveRows, setTopFiveRows] = useState([]);
+
+    useEffect(() => {
+        fetch("/api/userLog")
+        .then((response) => response.json())
+        .then((grades) => {
+            let gradesList = []
+            for (const g of grades){
+                gradesList.push(g.prefix + g.suffix);
+            }
+            gradesList = gradesList.sort(compareGrades); // sort the grades 
+            console.log("Here are the sorted grades: ", gradesList);
+            setTopFiveRows(organizeRows(gradesList)); // get the top 5 rows as components, set them
+        });
+      }, []);
     
+    // useEffect(() => {
+    //     let sortedGrades = [];
+    //     climber = JSON.parse(localStorage.getItem("user"));
+    //     const Routes = climber.routeList;
+    //     for (let i = 0; i < Routes.length; i++){
+    //     sortedGrades.push(Routes[i].grade.prefix + Routes[i].grade.suffix)
+    //     }
+    //     sortedGrades = sortedGrades.sort(compareGrades);
+    //     console.log("These are the sorted Grades", sortedGrades);
+    //     setGrades(sortedGrades);
+    // }, []);
+
     function parseGrade(grade) {
         const numberPart = parseInt(grade); // Extract numeric part
         const letterPart = grade.match(/[a-zA-Z]/) ? grade.match(/[a-zA-Z]/)[0] : ''; // Extract letter part if it exists
@@ -14,56 +40,41 @@ export function Log({climber}) {
     function compareGrades(grade1, grade2) {
         const { numberPart: num1, letterPart: let1 } = parseGrade(grade1);
         const { numberPart: num2, letterPart: let2 } = parseGrade(grade2);
-    
         // First, compare by number (descending order)
         if (num1 !== num2) {
             return num2 - num1; // Higher numbers come first
         }
-    
         // If numbers are equal, compare by letter (descending alphabetical order)
         if (let1 !== let2) {
             return let2.localeCompare(let1); // Higher letters come first ('d' > 'a')
         }
-    
         return 0; // If both number and letter are equal
     }
 
+    function organizeRows(grades){
+        let i = 0;
+        let gradeRows = [];
+        while (i < grades.length) {
+            let rowVal = grades[i];  // Get the current grade
+            let rowLength = 1;       // Initialize the count for this row
+            let j = i + 1;
     
-    useEffect(() => {
-        let sortedGrades = [];
-        climber = JSON.parse(localStorage.getItem("user"));
-        const Routes = climber.routeList;
-        for (let i = 0; i < Routes.length; i++){
-        sortedGrades.push(Routes[i].grade.prefix + Routes[i].grade.suffix)
+            // Check for consecutive grades that are the same
+            while (j < grades.length && grades[i] === grades[j]) {
+                rowLength += 1;
+                j += 1;
+            }
+    
+            // Create a new Row component and push it to gradeRows
+            const currentRow = <Row key={i} numOfCirlces={rowLength} grade={`5.${rowVal}`} />;
+            gradeRows.push(currentRow);
+    
+            // Move i to j to process the next unique grade
+            i = j;
         }
-        sortedGrades = sortedGrades.sort(compareGrades);
-        console.log("These are the sorted Grades", sortedGrades);
-        setGrades(sortedGrades);
-    }, []);
-
-    // Now i just need to make the rows 
-    const gradeRows = [];
-    let i = 0;
-
-    while (i < grades.length) {
-        let rowVal = grades[i];  // Get the current grade
-        let rowLength = 1;       // Initialize the count for this row
-        let j = i + 1;
-
-        // Check for consecutive grades that are the same
-        while (j < grades.length && grades[i] === grades[j]) {
-            rowLength += 1;
-            j += 1;
-        }
-
-        // Create a new Row component and push it to gradeRows
-        const currentRow = <Row key={i} numOfCirlces={rowLength} grade={`5.${rowVal}`} />;
-        gradeRows.push(currentRow);
-
-        // Move i to j to process the next unique grade
-        i = j;
+        return gradeRows.slice(0,5);
     }
-    const topFiveRows = gradeRows.slice(0,5);
+   
     
   return (
     <>

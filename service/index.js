@@ -104,6 +104,10 @@ apiRouter.get('/userLog', (req, res) => {
     console.log("In /userLog");
     userName = req.body.userName
     if (userName in users){
+        gradeList = []
+        for (const route of users[userName].climbingInfo.routeList){
+            gradeList.push(route.grade);
+        }
         res.send(users[userName].climbingInfo.routeList);
     } else {
         res.status(401).send({ msg: 'User Not Found' });

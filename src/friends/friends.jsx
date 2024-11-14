@@ -6,14 +6,6 @@ export function Friends() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const climberList = localStorage.getItem('climbers');
-    if (climberList) {
-      setClimbers(JSON.parse(climberList));
-    }
-    console.log(climberList);
-  }, []);
-
-  useEffect(() => {
     fetch("/api/friendInfo")
     .then((response) => response.json())
     .then((climbers) => {
