@@ -1,5 +1,4 @@
 import React from 'react';
-import climbingImage from "../../public/male-climber-on-overhanging-rock-600nw-501632293.webp"
 import { useNavigate, NavLink } from 'react-router-dom';
 
 export function PostUpdateLog() {

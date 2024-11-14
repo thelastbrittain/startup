@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import climbingImage from "../../public/male-climber-on-overhanging-rock-600nw-501632293.webp"
 
 export function About(props) {
   const [imageUrl, setImageUrl] = useState("");
-  const [test, setTest] = useState({});
-  
-  useEffect(() => {
-    fetch('/api/users')
-      .then((response) => response.json())
-      .then((users) => {
-        setTest(users);
-      });
-      console.log(test);
-  }, []);
+  const apiKey = import.meta.env.VITE_PIXABAY_ACCESS_KEY;
 
   useEffect(() => {
-    setImageUrl(climbingImage);
+    async function fetchClimbingImage() {
+      try {
+        const response = await fetch(
+          `https://pixabay.com/api/?key=${import.meta.env.VITE_PIXABAY_ACCESS_KEY}&q=climbing&image_type=photo&per_page=100`
+        );
+        const data = await response.json();
+        
+        const randomIndex = Math.floor(Math.random() * data.hits.length);
+        const selectedImage = data.hits[randomIndex];
+        
+        setImageUrl(selectedImage.largeImageURL); // Set the URL of the selected image
+      } catch (error) {
+        console.error('Error fetching image:', error);
+      }
+    }
+
+    fetchClimbingImage();
   }, []);
 
   return (
@@ -33,7 +39,7 @@ export function About(props) {
             progress they really are making.
         </p>
         <img src={imageUrl} 
-        alt="climbing image" width="1000" height="500"/> 
+        alt="climbing image" /> 
     </main>
   );
 }
