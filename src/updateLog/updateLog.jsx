@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import "./updateLog.css"
 import { useNavigate } from 'react-router-dom';
-import { Climber } from '../../public/climber';
-import { Route } from '../../public/route';
-import { Grade } from '../../public/grade';
-import { Style } from '../../public/style';
 
 export function UpdateLog({props}) {
     const navigate = useNavigate();
