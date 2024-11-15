@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./updateLog.css"
 import { useNavigate } from 'react-router-dom';
 
-export function UpdateLog({props}) {
+export function UpdateLog(props) {
     const navigate = useNavigate();
     const [style, setStyle] = useState('Solo');
     const [style2, setStyle2] = useState("None");
@@ -19,7 +19,7 @@ export function UpdateLog({props}) {
     async function updateClimber() {
         const response = await fetch(`/api/auth/logRoute`, {
           method: 'post',
-          body: JSON.stringify({ email: props.userName, 
+          body: JSON.stringify({"userName": props.userName, 
                                 route: {"prefix": prefix, 
                                     "suffix": suffix, "style": style, 
                                     "style2": style2, "notes": notes}}),
@@ -37,14 +37,18 @@ export function UpdateLog({props}) {
 
     const handleGradeChange = (event) => {
         const gradeValue = event.target.value; // e.g., "5.10a"
-        const gradeParts = gradeValue.split('.');
-        if (gradeParts.length === 2) {
-            const numberAndLetter = gradeParts[1];
+        const gradeParts = gradeValue.split('.'); 
+        const numberAndLetter = gradeParts[1];
+        if (numberAndLetter.length > 1){
             const numberPart = numberAndLetter.slice(0, -1); // Extract number part (e.g., "10")
             const letterPart = numberAndLetter.slice(-1); // Extract letter part (e.g., "a")
             setPrefix(numberPart);
             setSuffix(letterPart);
+        } else {
+            setPrefix(numberAndLetter);
         }
+            
+        
     };
 
     const handleStyleChange = (event) => {

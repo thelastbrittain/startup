@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const uuid = require('uuid');
 const app = express();
@@ -10,6 +11,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // automatically parse JSON --middleware
 app.use(express.json());
+app.use(cors());
 
 // allow to pull from public files
 app.use(express.static('public'));
@@ -51,6 +53,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 
 // DeleteAuth logout a user
 apiRouter.delete('/auth/logout', (req, res) => {
+    console.log("In /auth/logout");
     const user = Object.values(users).find((u) => u.token === req.body.token);
     if (user) {
       delete user.token;
@@ -64,12 +67,14 @@ apiRouter.delete('/auth/logout', (req, res) => {
 // returns an empty body
 apiRouter.post('/auth/logRoute', async (req, res) => {
     console.log("in /auth/logRoute")
-    const email = users[req.body.email];
-    if (email in users) {
-        users[email].climbingInfo.routeList.push((req.body.route)); // add route to the list
-        users[email].climbingInfo.numRoutesClimbed += 1; // update num of routes climbed
-        users[email].climbingInfo.latestRouteClimbed = req.body.route.date; // update date of most recent climb
-        updateHardestRoute(email, req.body.route); // update hardest route 
+    console.log("This is the req body", req.body);
+    console.log("These are the current users: ", users);
+    const userName = req.body.userName;
+    if (userName in users) {
+        users[userName].climbingInfo.routeList.push((req.body.route)); // add route to the list
+        users[userName].climbingInfo.numRoutesClimbed += 1; // update num of routes climbed
+        users[userName].climbingInfo.latestRouteClimbed = new Date(); // update date of most recent climb
+        updateHardestRoute(userName, req.body.route); // update hardest route 
         res.send({});
         return;
       };
@@ -80,9 +85,9 @@ apiRouter.post('/auth/logRoute', async (req, res) => {
 // Get Friends
 // Takes a username
 // returns climbing info for each person other than the username requesting it
-apiRouter.get('/friendInfo:userName', (req, res) => {
+apiRouter.get('/friendInfo/:userName', (req, res) => {
     console.log("In /friendInfo");
-    const userName = req.query.userName;
+    const userName = req.params.userName;
     if (userName in users){
         climbingInfoList = [];
         for (const [key, value] of Object.entries(users)){
@@ -100,15 +105,18 @@ apiRouter.get('/friendInfo:userName', (req, res) => {
 // userLog
 // take a userName
 // Returns routeList of that user
-apiRouter.get('/userLog', (req, res) => {
+apiRouter.get('/userLog/:userName', (req, res) => {
     console.log("In /userLog");
-    userName = req.body.userName
+    console.log("this is the req.params", req.params);
+    userName = req.params.userName;
+    console.log("This is the username we're getting", userName);
+    console.log("These are the current users:", users);
     if (userName in users){
         gradeList = []
         for (const route of users[userName].climbingInfo.routeList){
-            gradeList.push(route.grade);
+            gradeList.push(route.prefix + route.suffix);
         }
-        res.send(users[userName].climbingInfo.routeList);
+        res.send(gradeList);
     } else {
         res.status(401).send({ msg: 'User Not Found' });
     }
@@ -126,10 +134,14 @@ apiRouter.get('/userLog', (req, res) => {
 
 function updateHardestRoute(user, route){
     // if hardest, update hardest
-    if (greaterThan(users[user].climbingInfo.hardestGrade), route.grade){
+    let currentGrade = users[user].climbingInfo.hardestGrade;
+    console.log("This is the current grade: ", currentGrade);
+    console.log("This is the new grade: ", route);
+    if (greaterThan(currentGrade, route)){
         return;
     } 
-    users[user].climbingInfo.hardestGrade = route.grade;
+    console.log("Updating new hardest route to be: ", route);
+    users[user].climbingInfo.hardestGrade = {"prefix": route.prefix, "suffix": route.suffix};
     
 }
 
@@ -142,16 +154,39 @@ function createClimber(email) {
 }
 
 function greaterThan(currentGrade, newGrade) {
-    if (currentGrade.prefix < newGrade.prefix) {
-        return false;
-    } else if (currentGrade.prefix > newGrade.prefix) {
-        return true;
+    console.log("Current grade prefix and suffix: ", currentGrade.prefix, currentGrade.suffix);
+    console.log("New grade prefix and suffix: ", newGrade.prefix, newGrade.suffix);
+
+    // Convert prefixes to numbers for numerical comparison
+    const currentPrefix = parseInt(currentGrade.prefix, 10);
+    const newPrefix = parseInt(newGrade.prefix, 10);
+
+    if (!currentPrefix) return false; 
+
+    // Compare prefixes numerically
+    if (currentPrefix < newPrefix) {
+      return false;
+    } else if (currentPrefix > newPrefix) {
+      return true;
     } else {
-        if (currentGrade.suffix <= newGrade.suffix){
-            return false;
-        } else {
-            return true;
-        }
+
+      // If current grade has no suffix and new grade does, new grade is harder
+      if (!currentGrade.suffix && newGrade.suffix) {
+        return false;
+      }
+      // If current grade has a suffix but new grade does not, current grade is harder
+      if (currentGrade.suffix && !newGrade.suffix) {
+        return true;
+      }
+
+      if (currentGrade.suffix < newGrade.suffix) {
+        return false;
+      } else if (currentGrade.suffix > newGrade.suffix) {
+        return true;
+      } else {
+        // If both prefix and suffix are equal, current grade is not greater
+        return false;
+      }
     }
 }
 

@@ -1,34 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import "./log.css"
 
-export function Log({props}) {
+export function Log(props) {
     const [topFiveRows, setTopFiveRows] = useState([]);
 
     useEffect(() => {
         fetch(`/api/userLog/${encodeURIComponent(props.userName)}`)
         .then((response) => response.json())
         .then((grades) => {
-            let gradesList = []
-            for (const g of grades){
-                gradesList.push(g.prefix + g.suffix);
-            }
-            gradesList = gradesList.sort(compareGrades); // sort the grades 
+            let gradesList = grades.sort(compareGrades); // sort the grades 
             console.log("Here are the sorted grades: ", gradesList);
             setTopFiveRows(organizeRows(gradesList)); // get the top 5 rows as components, set them
         });
       }, []);
     
-    // useEffect(() => {
-    //     let sortedGrades = [];
-    //     climber = JSON.parse(localStorage.getItem("user"));
-    //     const Routes = climber.routeList;
-    //     for (let i = 0; i < Routes.length; i++){
-    //     sortedGrades.push(Routes[i].grade.prefix + Routes[i].grade.suffix)
-    //     }
-    //     sortedGrades = sortedGrades.sort(compareGrades);
-    //     console.log("These are the sorted Grades", sortedGrades);
-    //     setGrades(sortedGrades);
-    // }, []);
 
     function parseGrade(grade) {
         const numberPart = parseInt(grade); // Extract numeric part
