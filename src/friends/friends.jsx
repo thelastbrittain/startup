@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function Friends({props}) {
+export function Friends(props) {
   const [climbers, setClimbers] = useState([]);
   const navigate = useNavigate();
 
@@ -14,21 +14,21 @@ export function Friends({props}) {
   }, []);
 
 
-  const handleRowClick = () => {
-    navigate("/log");
+  const handleRowClick = (userName) => {
+    navigate(`/log/${encodeURIComponent(userName)}`);
   }
 
-
   const climberRows = [];
+  console.log(climbers);
   if (climbers.length) {
     for (const [i, climber] of climbers.entries()) {
       climberRows.push(
         <tr key={i}
-        onClick={handleRowClick} style={{ cursor: 'pointer' }}>
+         onClick={() => handleRowClick(climber.userName)}
+         style={{ cursor: 'pointer' }}>
           <td>{i}</td>
           <td>{climber.userName}</td>
-          <td>{`${climber.hardestGrade.prefix}.${climber.hardestGrade.suffix}`}</td>
-          <td>{climber.numRoutesClimbed}</td>
+          <td>{`5.${climber.hardestGrade.prefix}${climber.hardestGrade.suffix && `${climber.hardestGrade.suffix}`}`}</td>          <td>{climber.numRoutesClimbed}</td>
         </tr>
       );
     }

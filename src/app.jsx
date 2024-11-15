@@ -18,7 +18,7 @@ export default function App() {
     return( 
         <BrowserRouter>
             <div className='body bg-dark text-light'>
-                <Header authState={authState}/>
+                <Header authState={authState} userName={userName}/>
                 <Routes>
                     <Route path="/" element={<Login
                         userName={userName}
@@ -31,7 +31,7 @@ export default function App() {
                         }
                         exact
                     />
-                    <Route path="/log" element={<Log userName={userName}/>}/>
+                    <Route path="/log/:userName" element={<Log/>}/>
                     <Route path="/friends" element={<Friends userName={userName}/>}/>
                     <Route path="/about" element={<About/>}/>
                     <Route path="/updateLog" element={<UpdateLog userName={userName}/>}/>
@@ -49,7 +49,7 @@ function NotFound() {
   }
 
 
-function Header({authState}) {
+function Header({authState, userName}) {
     return (
         <header className="container-fluid">
 			<nav className = "navbar fixed-top navbar-light bg-white">
@@ -59,7 +59,7 @@ function Header({authState}) {
 					<NavLink className = "nav-link active" to="/">Login</NavLink>
 				</li>
                 {authState === AuthState.Authenticated && (<li className = "nav-item">
-					<NavLink className = "nav-link active" to="log">Your Log</NavLink>
+					<NavLink className = "nav-link active" to={`/log/${encodeURIComponent(userName)}`}>Your Log</NavLink>
 				</li>)}
 				{authState === AuthState.Authenticated && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="updateLog">Update Log</NavLink>

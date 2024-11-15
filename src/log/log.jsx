@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
+import { useParams } from "react-router-dom";
+
 import "./log.css"
 
-export function Log(props) {
+export function Log() {
     const [topFiveRows, setTopFiveRows] = useState([]);
 
+    const { userName } = useParams();
     useEffect(() => {
-        fetch(`/api/userLog/${encodeURIComponent(props.userName)}`)
+        fetch(`/api/userLog/${encodeURIComponent(userName)}`)
         .then((response) => response.json())
         .then((grades) => {
             let gradesList = grades.sort(compareGrades); // sort the grades 

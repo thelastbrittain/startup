@@ -4,7 +4,7 @@ const uuid = require('uuid');
 const app = express();
 
 /* Data Structures */
-let users = {"testUser": {"userName": "TestUsername", "password": "testPassword"}};
+let users = {};
 
 // service port
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -88,6 +88,7 @@ apiRouter.post('/auth/logRoute', async (req, res) => {
 apiRouter.get('/friendInfo/:userName', (req, res) => {
     console.log("In /friendInfo");
     const userName = req.params.userName;
+    console.log("this is the username incoming", userName);
     if (userName in users){
         climbingInfoList = [];
         for (const [key, value] of Object.entries(users)){
@@ -95,6 +96,7 @@ apiRouter.get('/friendInfo/:userName', (req, res) => {
                 climbingInfoList.push(value.climbingInfo)
             }
         }
+        console.log("This is what is being sent back: ", climbingInfoList);
         res.send(climbingInfoList);
     } else {
         res.status(401).send({ msg: 'Unauthorized' });
