@@ -25,7 +25,7 @@ export function Friends(props) {
       // console.log(climber.climbingInfo.userName);
       climberRows.push(
         <tr key={i}
-         onClick={() => handleRowClick(climber.userName)}
+         onClick={() => handleRowClick(climber.climbingInfo.userName)}
          style={{ cursor: 'pointer' }}>
           <td>{i}</td>
           <td>{climber.climbingInfo.userName}</td>

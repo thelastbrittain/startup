@@ -85,15 +85,13 @@ secureApiRouter.use(async (req, res, next) => {
   }
 });
 
-
 secureApiRouter.post('/auth/logRoute', async (req, res) => {
     console.log("in /auth/logRoute")
     console.log("This is the req body", req.body);
-    updatedUser = DB.updateClimbingLog(req.body.userName, req.body.route);
-    console.log(updatedUser);
+    updatedUser = await DB.updateClimbingLog(req.body.userName, req.body.route);
+    console.log("THis is the updated user: ", updatedUser);
     res.send(updatedUser);
 });
-
 
 
 // Get Friends
@@ -102,7 +100,6 @@ secureApiRouter.post('/auth/logRoute', async (req, res) => {
 secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
   console.log("In /friendInfo");
   const userName = req.params.userName;
-  console.log("this is the username incoming", userName);
   const climbingInfoList = await DB.getFriendList(userName);
   res.send(climbingInfoList);
 });
@@ -110,22 +107,29 @@ secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
 // userLog
 // take a userName
 // Returns routeList of that user
-apiRouter.get('/userLog/:userName', (req, res) => {
-    console.log("In /userLog");
-    console.log("this is the req.params", req.params);
-    userName = req.params.userName;
-    console.log("This is the username we're getting", userName);
-    console.log("These are the current users:", users);
-    if (userName in users){
-        gradeList = []
-        for (const route of users[userName].climbingInfo.routeList){
-            gradeList.push(route.prefix + route.suffix);
-        }
-        res.send(gradeList);
-    } else {
-        res.status(401).send({ msg: 'User Not Found' });
-    }
+secureApiRouter.get('/userLog/:userName', async (req, res) => {
+  console.log("in /userLog, this is the passed in email", req.params.userName);
+  gradeList = await DB.getGradeListByEmail(req.params.userName)
+  res.send(gradeList);
 });
+
+
+// apiRouter.get('/userLog/:userName', (req, res) => {
+//     console.log("In /userLog");
+//     console.log("this is the req.params", req.params);
+//     userName = req.params.userName;
+//     console.log("This is the username we're getting", userName);
+//     console.log("These are the current users:", users);
+//     if (userName in users){
+//         gradeList = []
+//         for (const route of users[userName].climbingInfo.routeList){
+//             gradeList.push(route.prefix + route.suffix);
+//         }
+//         res.send(gradeList);
+//     } else {
+//         res.status(401).send({ msg: 'User Not Found' });
+//     }
+// });
 
 
 /* Helper Functions */

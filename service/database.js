@@ -21,9 +21,27 @@ function getUser(email) {
     return userCollection.findOne({ email: email });
 }
   
-  function getUserByToken(token) {
+function getUserByToken(token) {
     return userCollection.findOne({ token: token });
 }
+
+async function getGradeListByEmail(email){
+    const climber = await userCollection.findOne(
+        { email: email },
+        { projection: { 'climbingInfo.routeList': 1, _id: 0 } } // Only retrieve the updated routeList
+      );
+      console.log("This is the email passed in: ", email);
+      console.log("THis is the climber: ", climber);
+      routeList = climber.climbingInfo.routeList;
+      console.log("This is the route list: ", routeList);
+      let gradeList = [];
+      for (const route of routeList){
+            gradeList.push(route.prefix + route.suffix);
+        }
+
+      return gradeList;
+}
+
 
 async function createUser(email, password, climbingInfo) {
     // Hash the password before we insert it into the database
@@ -72,12 +90,12 @@ async function updateClimbingLog(email, newRoute) {
         }
       );
 
-      const updatedUser = await userCollection.findOne(
+      const updatedClimber = await userCollection.findOne(
         { email: email },
         { projection: { 'climbingInfo.routeList': 1, _id: 0 } } // Only retrieve the updated routeList
       );
 
-      return updatedUser;
+      return updatedClimber;
 }
 
 
@@ -124,5 +142,6 @@ module.exports = {
     createUser,
     getFriendList,
     updateClimbingLog,
+    getGradeListByEmail,
   };
   
