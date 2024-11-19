@@ -109,23 +109,31 @@ secureApiRouter.post('/auth/logRoute', async (req, res) => {
 // Get Friends
 // Takes a username
 // returns climbing info for each person other than the username requesting it
-apiRouter.get('/friendInfo/:userName', (req, res) => {
-    console.log("In /friendInfo");
-    const userName = req.params.userName;
-    console.log("this is the username incoming", userName);
-    if (userName in users){
-        climbingInfoList = [];
-        for (const [key, value] of Object.entries(users)){
-            if (key !== userName){
-                climbingInfoList.push(value.climbingInfo)
-            }
-        }
-        console.log("This is what is being sent back: ", climbingInfoList);
-        res.send(climbingInfoList);
-    } else {
-        res.status(401).send({ msg: 'Unauthorized' });
-    }
-  });
+secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
+  console.log("In /friendInfo");
+  const userName = req.params.userName;
+  console.log("this is the username incoming", userName);
+  const climbingInfoList = await DB.getFriendList(userName);
+  res.send(climbingInfoList);
+});
+
+// apiRouter.get('/friendInfo/:userName', (req, res) => {
+//     console.log("In /friendInfo");
+//     const userName = req.params.userName;
+//     console.log("this is the username incoming", userName);
+//     if (userName in users){
+//         climbingInfoList = [];
+//         for (const [key, value] of Object.entries(users)){
+//             if (key !== userName){
+//                 climbingInfoList.push(value.climbingInfo)
+//             }
+//         }
+//         console.log("This is what is being sent back: ", climbingInfoList);
+//         res.send(climbingInfoList);
+//     } else {
+//         res.status(401).send({ msg: 'Unauthorized' });
+//     }
+//   });
 
 
 // userLog

@@ -40,9 +40,18 @@ async function createUser(email, password, climbingInfo) {
     return user;
 }
 
+async function getFriendList(userName) {
+    const climbingInfoArray = await db.collection('users').find(
+        { userName: { $ne: userName } }, // Exclude the user with the given userName
+        { projection: { climbingInfo: 1, _id: 0 } } // Only return climbingInfo, exclude _id
+    ).toArray();
+    return climbingInfoArray;
+}
+
 module.exports = {
     getUser,
     getUserByToken,
     createUser,
+    getFriendList,
   };
   
