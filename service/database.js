@@ -40,12 +40,82 @@ async function createUser(email, password, climbingInfo) {
     return user;
 }
 
-async function getFriendList(userName) {
+async function getFriendList(email) {
     const climbingInfoArray = await db.collection('users').find(
-        { userName: { $ne: userName } }, // Exclude the user with the given userName
+        { email: { $ne: email } }, // Exclude the user with the given email
         { projection: { climbingInfo: 1, _id: 0 } } // Only return climbingInfo, exclude _id
     ).toArray();
     return climbingInfoArray;
+}
+
+async function updateClimbingLog(email, newRoute) {
+    const user = await userCollection.findOne({email: email});
+    if (!user) {
+        console.error("User not found");
+        return;
+      }
+      const currentHardestGrade = user.climbingInfo.hardestGrade;
+      let updateHardestGrade = false;
+      if (!greaterThan(currentHardestGrade, newRoute)) {
+          updateHardestGrade = true; // The new route is harder
+      }
+
+      await userCollection.updateOne(
+        { email: email }, // Find user by email
+        {
+          $push: { 'climbingInfo.routeList': newRoute }, // Add new route to routeList
+          $inc: { 'climbingInfo.numRoutesClimbed': 1 }, // Increment numRoutesClimbed by 1
+          $set: {
+            ...(updateHardestGrade && { 'climbingInfo.hardestGrade': { prefix: newRoute.prefix, suffix: newRoute.suffix } }), // Update hardest grade if necessary
+            'climbingInfo.latestRouteClimbed': new Date() // Set latestRouteClimbed to the current date and time
+          }
+        }
+      );
+
+      const updatedUser = await userCollection.findOne(
+        { email: email },
+        { projection: { 'climbingInfo.routeList': 1, _id: 0 } } // Only retrieve the updated routeList
+      );
+
+      return updatedUser;
+}
+
+
+function greaterThan(currentGrade, newGrade) {
+    console.log("Current grade prefix and suffix: ", currentGrade.prefix, currentGrade.suffix);
+    console.log("New grade prefix and suffix: ", newGrade.prefix, newGrade.suffix);
+
+    // Convert prefixes to numbers for numerical comparison
+    const currentPrefix = parseInt(currentGrade.prefix, 10);
+    const newPrefix = parseInt(newGrade.prefix, 10);
+
+    if (!currentPrefix) return false; 
+
+    // Compare prefixes numerically
+    if (currentPrefix < newPrefix) {
+      return false;
+    } else if (currentPrefix > newPrefix) {
+      return true;
+    } else {
+
+      // If current grade has no suffix and new grade does, new grade is harder
+      if (!currentGrade.suffix && newGrade.suffix) {
+        return false;
+      }
+      // If current grade has a suffix but new grade does not, current grade is harder
+      if (currentGrade.suffix && !newGrade.suffix) {
+        return true;
+      }
+
+      if (currentGrade.suffix < newGrade.suffix) {
+        return false;
+      } else if (currentGrade.suffix > newGrade.suffix) {
+        return true;
+      } else {
+        // If both prefix and suffix are equal, current grade is not greater
+        return false;
+      }
+    }
 }
 
 module.exports = {
@@ -53,5 +123,6 @@ module.exports = {
     getUserByToken,
     createUser,
     getFriendList,
+    updateClimbingLog,
   };
   
