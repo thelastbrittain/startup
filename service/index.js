@@ -116,6 +116,7 @@ secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
   const climbingInfoList = await DB.getFriendList(userName);
   res.send(climbingInfoList);
 });
+//fix type handling so if someone never logs something it doesn't break
 
 // apiRouter.get('/friendInfo/:userName', (req, res) => {
 //     console.log("In /friendInfo");

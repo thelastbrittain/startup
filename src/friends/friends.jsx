@@ -19,16 +19,18 @@ export function Friends(props) {
   }
 
   const climberRows = [];
-  console.log(climbers);
+  // console.log(climbers);
   if (climbers.length) {
     for (const [i, climber] of climbers.entries()) {
+      // console.log(climber.climbingInfo.userName);
       climberRows.push(
         <tr key={i}
          onClick={() => handleRowClick(climber.userName)}
          style={{ cursor: 'pointer' }}>
           <td>{i}</td>
-          <td>{climber.userName}</td>
-          <td>{`5.${climber.hardestGrade.prefix}${climber.hardestGrade.suffix && `${climber.hardestGrade.suffix}`}`}</td>          <td>{climber.numRoutesClimbed}</td>
+          <td>{climber.climbingInfo.userName}</td>
+          <td>{climber.climbingInfo.hardestGrade ? `5.${climber.climbingInfo.hardestGrade.prefix}${climber.climbingInfo.hardestGrade.suffix && `${climber.climbingInfo.hardestGrade.suffix}`}`: 'Unavailable'}</td>
+          <td>{climber.climbingInfo.numRoutesClimbed}</td>
         </tr>
       );
     }
