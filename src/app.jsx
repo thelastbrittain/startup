@@ -58,9 +58,17 @@ function Header({authState, userName}) {
                 <li className = "nav-item">
 					<NavLink className = "nav-link active" to="/">Login</NavLink>
 				</li>
-                {authState === AuthState.Authenticated && (<li className = "nav-item">
-					<NavLink className = "nav-link active" to={`/log/${encodeURIComponent(userName)}`}>Your Log</NavLink>
-				</li>)}
+                {authState === AuthState.Authenticated && (
+                <li className="nav-item">
+                    <NavLink
+                    className="nav-link active"
+                    to={`/log/${encodeURIComponent(userName)}`}
+                    reloadDocument
+                    >
+                    Your Log
+                    </NavLink>
+                </li>
+                )}
 				{authState === AuthState.Authenticated && (<li className = "nav-item">
 					<NavLink className = "nav-link active" to="updateLog">Update Log</NavLink>
 				</li>)}
