@@ -1,7 +1,12 @@
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const express = require('express');
-const uuid = require('uuid');
 const app = express();
+const uuid = require('uuid');
+const DB = require('./database.js');
+
+const authCookieName = 'token';
 
 /* Data Structures */
 let users = {};
@@ -13,8 +18,15 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(cors());
 
+
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
+
 // allow to pull from public files
 app.use(express.static('public'));
+
+// Trust headers that are forwarded from the proxy so we can determine IP addresses
+app.set('trust proxy', true);
 
 // modularize routes for service endpoints
 var apiRouter = express.Router();
@@ -25,47 +37,59 @@ app.use(`/api`, apiRouter);
 
 // if not existing, create new user
 apiRouter.post('/auth/create', async (req, res) => {
-    console.log("In auth/create")
-    const user = users[req.body.email];
-    if (user) {
+    if (await DB.getUser(req.body.email)) {
       res.status(409).send({ msg: 'Existing user' });
     } else {
-      const user = { email: req.body.email, password: req.body.password, token: uuid.v4(), climbingInfo: createClimber(req.body.email)};
-      users[user.email] = user;
-  
-      res.send({ token: user.token });
+      const user = await DB.createUser(req.body.email, req.body.password, createClimber(req.body.email));
+
+      // Set the cookie
+      setAuthCookie(res, user.token);
+
+      res.send({
+        id: user._id,
+      });
     }
-  });
+});
 
 // GetAuth login an existing user
 apiRouter.post('/auth/login', async (req, res) => {
-    console.log("in /auth/login")
-    const user = users[req.body.email];
-    if (user) {
-      if (req.body.password === user.password) {
-        user.token = uuid.v4();
-        res.send({ token: user.token });
-        return;
-      }
+  const user = await DB.getUser(req.body.email);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      return;
     }
-    res.status(401).send({ msg: 'Unauthorized' });
-  });
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
 
 // DeleteAuth logout a user
-apiRouter.delete('/auth/logout', (req, res) => {
-    console.log("In /auth/logout");
-    const user = Object.values(users).find((u) => u.token === req.body.token);
-    if (user) {
-      delete user.token;
-    }
-    res.status(204).end();
-  });
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+// create route for secure endpoints
+const secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+// add middleware that will verify the user
+secureApiRouter.use(async (req, res, next) => {
+  const authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
 
 // Log Route /log 
 // takes a route and userName
 // adds route to userName given
 // returns an empty body
-apiRouter.post('/auth/logRoute', async (req, res) => {
+secureApiRouter.post('/auth/logRoute', async (req, res) => {
     console.log("in /auth/logRoute")
     console.log("This is the req body", req.body);
     console.log("These are the current users: ", users);
@@ -122,14 +146,7 @@ apiRouter.get('/userLog/:userName', (req, res) => {
     } else {
         res.status(401).send({ msg: 'User Not Found' });
     }
-  });
-
-
-  //This is just a test. Don't implement this
-  apiRouter.get('/users', (_req, res) => {
-    console.log("In /users");
-    res.send(users);
-  });
+});
 
 
 /* Helper Functions */
@@ -190,6 +207,19 @@ function greaterThan(currentGrade, newGrade) {
         return false;
       }
     }
+}
+
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+// setAuthCookie in the HTTP response
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
 }
 
 /* Start Listening */
