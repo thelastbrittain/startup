@@ -58,7 +58,7 @@ export function Friends(props) {
           </thead>
           <tbody className="table-dark">{climberRows}</tbody>
       </table>
-      <h3>This will be database data</h3>
+      <h3>This is Database data</h3>
     </main>
   );
 }

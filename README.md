@@ -62,8 +62,16 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
  - [x] **Hooks** - Used useState, useNavigate, and useEffect all throughout the project
 
 ## Service deliverable
-- [x] **Node.js/Express HTTP service** - done!
+ - [x] **Node.js/Express HTTP service** - done!
  - [x] **Static middleware for frontend** - done!
  - [x] **Calls to third party endpoints** - done!
  - [x] **Backend service endpoints** - Placeholders for login that stores the current user on the server. Endpoints for updating log, showing friends, and showing personal logs.
  - [x] **Frontend calls service endpoints** - I did this using the fetch function.
+
+## DB/Login deliverable
+ - [x] **MongoDB Atlas database created** - done!
+ - [x] **Stores data in MongoDB** - done!
+ - [x] **User registration** - Creates a new account in the database.
+ - [x] **Existing users** - Stores the votes under the same user if the user already exists.
+ - [x] **Use MongoDB to store credentials** - Stores both user and their votes.
+ - [x] **Restricts functionality** - Can only see friends, logs, and updateLog if logged in 

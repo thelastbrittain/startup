@@ -18,7 +18,6 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.use(express.json());
 app.use(cors());
 
-
 // Use the cookie parser middleware for tracking authentication tokens
 app.use(cookieParser());
 
@@ -94,9 +93,6 @@ secureApiRouter.post('/auth/logRoute', async (req, res) => {
 });
 
 
-// Get Friends
-// Takes a username
-// returns climbing info for each person other than the username requesting it
 secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
   console.log("In /friendInfo");
   const userName = req.params.userName;
@@ -104,33 +100,12 @@ secureApiRouter.get('/friendInfo/:userName', async (req, res) => {
   res.send(climbingInfoList);
 });
 
-// userLog
-// take a userName
-// Returns routeList of that user
+
 secureApiRouter.get('/userLog/:userName', async (req, res) => {
   console.log("in /userLog, this is the passed in email", req.params.userName);
   gradeList = await DB.getGradeListByEmail(req.params.userName)
   res.send(gradeList);
 });
-
-
-// apiRouter.get('/userLog/:userName', (req, res) => {
-//     console.log("In /userLog");
-//     console.log("this is the req.params", req.params);
-//     userName = req.params.userName;
-//     console.log("This is the username we're getting", userName);
-//     console.log("These are the current users:", users);
-//     if (userName in users){
-//         gradeList = []
-//         for (const route of users[userName].climbingInfo.routeList){
-//             gradeList.push(route.prefix + route.suffix);
-//         }
-//         res.send(gradeList);
-//     } else {
-//         res.status(401).send({ msg: 'User Not Found' });
-//     }
-// });
-
 
 /* Helper Functions */
 function createClimber(email) {
@@ -140,7 +115,6 @@ function createClimber(email) {
         "numRoutesClimbed": 0,
         "latestRouteClimbed": ""})
 }
-
 
 
 app.use((_req, res) => {
