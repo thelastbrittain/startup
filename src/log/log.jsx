@@ -40,7 +40,7 @@ export function Log() {
 
       messageArray.push(
         <div key={i} className='event'>
-          <span className={'player-event'}>{event.from.split('@')[0]}</span>
+          <span className={'climber-event'}>{event.from.split('@')[0]}</span>
           {message}
         </div>
       );
@@ -52,7 +52,7 @@ export function Log() {
   return (
     <>
       <main className="log-main">
-        <div id='player-messages'>{createMessageArray()}</div>
+        <div id='climber-messages'>{createMessageArray()}</div>
         <h1 className="log-header">Welcome to your log</h1>
         {topFiveRows.length > 0  ? topFiveRows : "Start logging to see your pyramid!"}
 

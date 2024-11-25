@@ -31,12 +31,12 @@ margin-bottom: 10rem;
     justify-content: flex-start;
 }
 
-.player-name {
+.climber-name {
     color: rgb(16, 135, 168);
     margin: 0 0.25em;
 }
   
-#player-messages {
+#climber-messages {
     padding-top: 0.25em;
     opacity: 0.7;
     position: fixed; 
@@ -44,7 +44,7 @@ margin-bottom: 10rem;
     /* top: 0; */
 }
 
-.player-event {
+.climber-event {
     color: rgb(165, 220, 235);
     margin: 0 0.25em;
 }
