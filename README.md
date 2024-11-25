@@ -75,3 +75,9 @@ After a year or so of climbing, most climbers feel that they are beginning to pl
  - [x] **Existing users** - Stores the votes under the same user if the user already exists.
  - [x] **Use MongoDB to store credentials** - Stores both user and their votes.
  - [x] **Restricts functionality** - Can only see friends, logs, and updateLog if logged in 
+
+## Websocket deliverable
+ - [x] **Backend listens for WebSocket connection** - done!
+ - [x] **Frontend makes WebSocket connection** - done!
+ - [x] **Data sent over WebSocket connection** - done!
+ - [x] **WebSocket data displayed** - When you are on a log, you can see what/when another persons logs
