@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./updateLog.css"
 import { useNavigate } from 'react-router-dom';
+import { LoggingNotifier } from '../eventNotifier';
 
 export function UpdateLog(props) {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ export function UpdateLog(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         updateClimber();
+        LoggingNotifier.broadcastEvent(props.userName, {prefix, suffix});
         navigate('/postUpdateLog');
     }
     

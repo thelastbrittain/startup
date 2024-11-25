@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./friends.css"
 
 export function Friends(props) {
   const [climbers, setClimbers] = useState([]);
@@ -47,7 +48,7 @@ export function Friends(props) {
       {/* <!-- Columns:  Name, hardest route, number of routes climbed --> */}
         {/* <!-- 336799 MTN Proj blue color --> */}
       <h1 className="friends-header">How are your friends doing?</h1>
-      <table className="table table-striped table-bordered custom-border friends-table">
+      <table className="table table-striped table-bordered custom-border friends-table friends-table">
           <thead className="table-dark">
               <tr>
                   <th>#</th>
@@ -58,7 +59,6 @@ export function Friends(props) {
           </thead>
           <tbody className="table-dark">{climberRows}</tbody>
       </table>
-      <h3>This is Database data</h3>
     </main>
   );
 }

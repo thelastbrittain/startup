@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from "react-router-dom";
+import { LoggingNotifier } from '../eventNotifier';
 
 import "./log.css"
 
 export function Log() {
     const [topFiveRows, setTopFiveRows] = useState([]);
+    const [events, setEvent] = useState([]);
 
     const { userName } = useParams();
     useEffect(() => {
@@ -16,19 +18,48 @@ export function Log() {
             setTopFiveRows(organizeRows(gradesList)); // get the top 5 rows as components, set them
         });
       }, []);
+
+      
+
+  useEffect(() => {
+    LoggingNotifier.addHandler(handleGameEvent);
+    return () => {
+      LoggingNotifier.removeHandler(handleGameEvent);
+    };
+  });
+
+  function handleGameEvent(event) {
+    setEvent([...events, event]);
+  }
+
+  function createMessageArray() {
+    const messageArray = [];
+    for (const [i, event] of events.entries()) {
+        let message = ""
+        event.value.msg ? message = " has connected" : message = "just logged a 5." + event.value.prefix + event.value.suffix;
+
+      messageArray.push(
+        <div key={i} className='event'>
+          <span className={'player-event'}>{event.from.split('@')[0]}</span>
+          {message}
+        </div>
+      );
+    }
+    return messageArray;
+  }
+
    
   return (
     <>
       <main className="log-main">
+        <div id='player-messages'>{createMessageArray()}</div>
         <h1 className="log-header">Welcome to your log</h1>
-        <div className="pyramid"></div>
-        {topFiveRows}
-        <p>(This is websocket data that will be updated in real time)</p>
+        {topFiveRows.length > 0  ? topFiveRows : "Start logging to see your pyramid!"}
+
     </main>
     </>
   );
 }
-
 
 
 function Circle({grade}) {
