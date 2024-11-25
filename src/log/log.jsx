@@ -16,54 +16,7 @@ export function Log() {
             setTopFiveRows(organizeRows(gradesList)); // get the top 5 rows as components, set them
         });
       }, []);
-    
-
-    function parseGrade(grade) {
-        const numberPart = parseInt(grade); // Extract numeric part
-        const letterPart = grade.match(/[a-zA-Z]/) ? grade.match(/[a-zA-Z]/)[0] : ''; // Extract letter part if it exists
-        return { numberPart, letterPart };
-    }
-    
-    // Custom sort function
-    function compareGrades(grade1, grade2) {
-        const { numberPart: num1, letterPart: let1 } = parseGrade(grade1);
-        const { numberPart: num2, letterPart: let2 } = parseGrade(grade2);
-        // First, compare by number (descending order)
-        if (num1 !== num2) {
-            return num2 - num1; // Higher numbers come first
-        }
-        // If numbers are equal, compare by letter (descending alphabetical order)
-        if (let1 !== let2) {
-            return let2.localeCompare(let1); // Higher letters come first ('d' > 'a')
-        }
-        return 0; // If both number and letter are equal
-    }
-
-    function organizeRows(grades){
-        let i = 0;
-        let gradeRows = [];
-        while (i < grades.length) {
-            let rowVal = grades[i];  // Get the current grade
-            let rowLength = 1;       // Initialize the count for this row
-            let j = i + 1;
-    
-            // Check for consecutive grades that are the same
-            while (j < grades.length && grades[i] === grades[j]) {
-                rowLength += 1;
-                j += 1;
-            }
-    
-            // Create a new Row component and push it to gradeRows
-            const currentRow = <Row key={i} numOfCirlces={rowLength} grade={`5.${rowVal}`} />;
-            gradeRows.push(currentRow);
-    
-            // Move i to j to process the next unique grade
-            i = j;
-        }
-        return gradeRows.slice(0,5);
-    }
    
-    
   return (
     <>
       <main className="log-main">
@@ -74,8 +27,9 @@ export function Log() {
     </main>
     </>
   );
-
 }
+
+
 
 function Circle({grade}) {
     return (
@@ -93,4 +47,50 @@ function Row({numOfCirlces, grade}){
     }
     return (<div className="row">{listOfCirlces}</div>
     );
+}
+
+
+function parseGrade(grade) {
+    const numberPart = parseInt(grade); // Extract numeric part
+    const letterPart = grade.match(/[a-zA-Z]/) ? grade.match(/[a-zA-Z]/)[0] : ''; // Extract letter part if it exists
+    return { numberPart, letterPart };
+}
+
+// Custom sort function
+function compareGrades(grade1, grade2) {
+    const { numberPart: num1, letterPart: let1 } = parseGrade(grade1);
+    const { numberPart: num2, letterPart: let2 } = parseGrade(grade2);
+    // First, compare by number (descending order)
+    if (num1 !== num2) {
+        return num2 - num1; // Higher numbers come first
+    }
+    // If numbers are equal, compare by letter (descending alphabetical order)
+    if (let1 !== let2) {
+        return let2.localeCompare(let1); // Higher letters come first ('d' > 'a')
+    }
+    return 0; // If both number and letter are equal
+}
+
+function organizeRows(grades){
+    let i = 0;
+    let gradeRows = [];
+    while (i < grades.length) {
+        let rowVal = grades[i];  // Get the current grade
+        let rowLength = 1;       // Initialize the count for this row
+        let j = i + 1;
+
+        // Check for consecutive grades that are the same
+        while (j < grades.length && grades[i] === grades[j]) {
+            rowLength += 1;
+            j += 1;
+        }
+
+        // Create a new Row component and push it to gradeRows
+        const currentRow = <Row key={i} numOfCirlces={rowLength} grade={`5.${rowVal}`} />;
+        gradeRows.push(currentRow);
+
+        // Move i to j to process the next unique grade
+        i = j;
+    }
+    return gradeRows.slice(0,5);
 }
