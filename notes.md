@@ -187,3 +187,106 @@ To use these properties effectively, it's crucial to understand the flex contain
 
 
  Proj: Got to instlaling react router dom. INstalled bootstrap, but haven't imported it into any files. 
+
+
+# Final Questions:
+
+What is the default port for HTTP/HTTPS/SSH?
+HTTP: 80
+HTTPS: 443
+SSH: 22
+
+
+What does an HTTP status code in the range of 300/400/500 indicate?
+300: Redirection
+400: Client error
+500: Server error
+
+
+What does the HTTP header content-type allow you to do?
+Specifies media type of the resource
+
+
+What does a “Secure cookie”/”Http-only cookie”/”Same-site cookie” do?
+Secure: Sent over HTTPS only
+HttpOnly: Inaccessible via JavaScript
+SameSite: Restricts cross-site requests
+
+
+Assuming the following Express middleware, what would be the console.log output for an HTTP GET request with a URL path of /api/document?
+Logs: Request URL and Request Type
+
+
+Given the following Express service code: What does the following front end JavaScript that performs a fetch return?
+Returns a promise resolving to a response object
+
+
+Given the following MongoDB query, select all of the matching documents {name:Mark}
+Query: db.collection.find({name: "Mark"})
+
+
+How should user passwords be stored?
+Use cryptographic hashes with salts (e.g., bcrypt)
+
+
+Assuming the following node.js websocket code in the back end, and the following front end websocket code, what will the front end log to the console?
+Logs messages exchanged over WebSocket
+
+
+What is the websocket protocol intended to provide?
+Full-duplex communication over a single TCP connection
+
+
+What do the following acronyms stand for? JSX, JS, AWS, NPM, NVM
+JSX: JavaScript XML
+JS: JavaScript
+AWS: Amazon Web Services
+NPM: Node Package Manager
+NVM: Node Version Manager
+
+
+Assuming an HTML document with a body element. What text content will the following React component generate? The react component will use parameters.
+Depends on component logic and parameters
+
+
+Given a set of React components that include each other, what will be generated?
+Rendered output based on component hierarchy and props
+
+
+What does a React component with React.useState do?
+Manages state in functional components
+
+
+What are React Hooks used for?
+Enable state and side effects in functional components
+
+
+What does the State Hook/Context Hook/Ref Hook/Effect Hook/Performance Hook do?
+State Hook: Manages state
+Context Hook: Accesses context data
+Ref Hook: References DOM elements or values across renders
+Effect Hook: Handles side effects like data fetching
+
+
+Given React Router code, select statements that are true.
+Depends on specific code and routing logic
+
+
+What does the package.json file do?
+Defines project metadata, scripts, and dependencies
+
+
+What does the fetch function do?
+Performs network requests and handles responses asynchronously
+
+
+What does node.js do?
+Executes JavaScript on server side
+
+
+What does pm2 do?
+Manages Node.js application processes
+
+
+What does Vite do?
+Provides fast development server and optimized builds
